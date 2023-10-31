@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1012971008972",
+    "project_id": "arecommerce-c4c25",
+    "storage_bucket": "arecommerce-c4c25.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1012971008972:android:e04643195dc07f80792369",
+        "android_client_info": {
+          "package_name": "com.example.arproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvYyXfpmO5nftCx75AtqTIMwC0sOkoQ2Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -2,6 +2,8 @@ plugins {
     id "com.android.application"
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
+    // Firebase setup
+    id 'com.google.gms.google-services'
 }
 
 def localProperties = new Properties()
@@ -24,7 +26,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.example.arproject"
-    compileSdkVersion 33
+    compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
