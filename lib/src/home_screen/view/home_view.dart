@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+import '../../../arnew_view.dart';
 import '../../../config/textstyles.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -46,31 +47,37 @@ class HomeView extends GetView<HomeController> {
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
                         padding: EdgeInsets.only(left: 3.w, right: 3.w),
-                        child: CachedNetworkImage(
-                          imageUrl: controller.productListNew[index].image,
-                          imageBuilder: (context, imageProvider) => Container(
-                            height: 25.h,
-                            width: 94.w,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    fit: BoxFit.cover, image: imageProvider)),
-                          ),
-                          placeholder: (context, url) => SizedBox(
-                            height: 25.h,
-                            width: 94.w,
-                            child: Center(
-                              child: SpinKitThreeBounce(
-                                color: Colors.lightBlue,
-                                size: 25.sp,
-                              ),
-                            ),
-                          ),
-                          errorWidget: (context, url, error) => SizedBox(
+                        child: InkWell(
+                          onTap: () {
+                            // Get.to(() => const MyWidget());
+                            Get.to(() => const LocalAndWebObjectsWidget());
+                          },
+                          child: CachedNetworkImage(
+                            imageUrl: controller.productListNew[index].image,
+                            imageBuilder: (context, imageProvider) => Container(
                               height: 25.h,
                               width: 94.w,
-                              child: const Center(
-                                child: Icon(Icons.error),
-                              )),
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      fit: BoxFit.cover, image: imageProvider)),
+                            ),
+                            placeholder: (context, url) => SizedBox(
+                              height: 25.h,
+                              width: 94.w,
+                              child: Center(
+                                child: SpinKitThreeBounce(
+                                  color: Colors.lightBlue,
+                                  size: 25.sp,
+                                ),
+                              ),
+                            ),
+                            errorWidget: (context, url, error) => SizedBox(
+                                height: 25.h,
+                                width: 94.w,
+                                child: const Center(
+                                  child: Icon(Icons.error),
+                                )),
+                          ),
                         ),
                       );
                     },
