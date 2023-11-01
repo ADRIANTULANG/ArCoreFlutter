@@ -49,7 +49,8 @@ class RegistrationController extends GetxController {
         "firstname": firstname.text,
         "lastname": lastname.text,
         "contactno": "",
-        "fcmToken": ""
+        "fcmToken": "",
+        "address": ""
       });
     } catch (e) {
       Get.snackbar(

@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
-import '../../../arnew_view.dart';
 import '../../../config/textstyles.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+// import '../../ar_screen/ar_view.dart';
+import '../../product_screen/view/product_view.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -50,7 +51,13 @@ class HomeView extends GetView<HomeController> {
                         child: InkWell(
                           onTap: () {
                             // Get.to(() => const MyWidget());
-                            Get.to(() => const LocalAndWebObjectsWidget());
+                            // Get.to(() => const LocalAndWebObjectsWidget(
+                            //       urlModel:
+                            //           'https://firebasestorage.googleapis.com/v0/b/arecommerce-c4c25.appspot.com/o/sofani.glb?alt=media&token=d0361984-3642-4c0d-8271-b0dcf44990d1&_gl=1*w3hovj*_ga*MTEwNDMyMTk3LjE2OTgzMzk3OTk.*_ga_CW55HF8NVT*MTY5ODg1MDAzNy4xMy4xLjE2OTg4NTAwODQuMTMuMC4w',
+                            //     ));
+                            Get.to(() => const ProductView(), arguments: {
+                              'product': controller.productListNew[index]
+                            });
                           },
                           child: CachedNetworkImage(
                             imageUrl: controller.productListNew[index].image,
@@ -138,47 +145,54 @@ class HomeView extends GetView<HomeController> {
                               crossAxisSpacing: 10),
                       itemCount: controller.productListAll.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    controller.productListAll[index].image,
-                                imageBuilder: (context, imageProvider) =>
-                                    Container(
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: imageProvider)),
-                                ),
-                                placeholder: (context, url) => SizedBox(
-                                  child: Center(
-                                    child: SpinKitThreeBounce(
-                                      color: Colors.lightBlue,
-                                      size: 25.sp,
+                        return InkWell(
+                          onTap: () {
+                            Get.to(() => const ProductView(), arguments: {
+                              'product': controller.productListAll[index]
+                            });
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: CachedNetworkImage(
+                                  imageUrl:
+                                      controller.productListAll[index].image,
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: imageProvider)),
+                                  ),
+                                  placeholder: (context, url) => SizedBox(
+                                    child: Center(
+                                      child: SpinKitThreeBounce(
+                                        color: Colors.lightBlue,
+                                        size: 25.sp,
+                                      ),
                                     ),
                                   ),
+                                  errorWidget: (context, url, error) =>
+                                      const SizedBox(
+                                          child: Center(
+                                    child: Icon(Icons.error),
+                                  )),
                                 ),
-                                errorWidget: (context, url, error) =>
-                                    const SizedBox(
-                                        child: Center(
-                                  child: Icon(Icons.error),
-                                )),
                               ),
-                            ),
-                            SizedBox(
-                              height: 1.h,
-                            ),
-                            Text(
-                              controller.productListAll[index].name,
-                              style: Styles.mediumTextBold,
-                            ),
-                            Text(
-                              "₱ ${controller.productListAll[index].price.toString()}",
-                              style: Styles.priceText,
-                            ),
-                          ],
+                              SizedBox(
+                                height: 1.h,
+                              ),
+                              Text(
+                                controller.productListAll[index].name,
+                                style: Styles.mediumTextBold,
+                              ),
+                              Text(
+                                "₱ ${controller.productListAll[index].price.toString()}",
+                                style: Styles.priceText,
+                              ),
+                            ],
+                          ),
                         );
                       },
                     ),

@@ -97,7 +97,8 @@ class LoginController extends GetxController {
           "firstname": "",
           "lastname": "",
           "contactno": "",
-          "fcmToken": ""
+          "fcmToken": "",
+          "address": ""
         });
       }
     } catch (e) {
