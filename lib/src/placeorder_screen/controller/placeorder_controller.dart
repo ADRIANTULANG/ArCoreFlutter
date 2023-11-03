@@ -1,9 +1,11 @@
+import 'package:arproject/src/order_screen/controller/order_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../model/products_model.dart';
+import '../../bottomnavigation_screen/controller/bottomnavigation_controller.dart';
 
 class PlaceOrderController extends GetxController {
   final firebase = FirebaseFirestore.instance;
@@ -68,12 +70,15 @@ class PlaceOrderController extends GetxController {
         "userEmail": email.text,
         "userAddress": address.text,
         "userContactno": contactno.text,
-        "status": "Pending"
+        "status": "Pending",
+        "dateTime": Timestamp.now()
       });
       Get.back();
       Get.back();
       Get.snackbar("Message", "Successfully placed order",
           backgroundColor: Colors.lightBlue, colorText: Colors.white);
+      Get.find<BottomNavigationController>().currentSelectedIndex.value = 1;
+      Get.find<OrderController>().getOrders();
     } catch (e) {
       Get.snackbar("Message", "Something went wrong please try again later. $e",
           backgroundColor: Colors.red, colorText: Colors.white);
