@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../config/textstyles.dart';
+import '../../ar_screen/ar_view.dart';
 import '../../placeorder_screen/view/placeorder_view.dart';
 
 class ProductView extends GetView<ProductController> {
@@ -23,10 +24,15 @@ class ProductView extends GetView<ProductController> {
         actions: [
           Padding(
             padding: EdgeInsets.only(top: 2.3.h),
-            child: FaIcon(
-              FontAwesomeIcons.cartPlus,
-              color: Colors.red[900],
-              size: 17.sp,
+            child: InkWell(
+              onTap: () {
+                controller.saveToCart();
+              },
+              child: FaIcon(
+                FontAwesomeIcons.cartPlus,
+                color: Colors.red[900],
+                size: 17.sp,
+              ),
             ),
           ),
           SizedBox(
@@ -53,31 +59,68 @@ class ProductView extends GetView<ProductController> {
                     children: [
                       Padding(
                         padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                        child: CachedNetworkImage(
-                          imageUrl: controller.product.image,
-                          imageBuilder: (context, imageProvider) => Container(
-                            height: 33.h,
-                            width: 94.w,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    fit: BoxFit.cover, image: imageProvider)),
-                          ),
-                          placeholder: (context, url) => SizedBox(
-                            height: 33.h,
-                            width: 94.w,
-                            child: Center(
-                              child: SpinKitThreeBounce(
-                                color: Colors.lightBlue,
-                                size: 25.sp,
+                        child: Stack(
+                          children: [
+                            CachedNetworkImage(
+                              imageUrl: controller.product.image,
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                height: 33.h,
+                                width: 94.w,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: imageProvider)),
                               ),
+                              placeholder: (context, url) => SizedBox(
+                                height: 33.h,
+                                width: 94.w,
+                                child: Center(
+                                  child: SpinKitThreeBounce(
+                                    color: Colors.lightBlue,
+                                    size: 25.sp,
+                                  ),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => SizedBox(
+                                  height: 33.h,
+                                  width: 94.w,
+                                  child: const Center(
+                                    child: Icon(Icons.error),
+                                  )),
                             ),
-                          ),
-                          errorWidget: (context, url, error) => SizedBox(
-                              height: 33.h,
-                              width: 94.w,
-                              child: const Center(
-                                child: Icon(Icons.error),
-                              )),
+                            Positioned(
+                              top: 1.h,
+                              left: 1.w,
+                              child: InkWell(
+                                onTap: () {
+                                  Get.to(() => ARview(
+                                      urlModel: controller.product.arFile));
+                                },
+                                child: Container(
+                                  height: 4.h,
+                                  width: 15.w,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.lightBlue[200]),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.camera,
+                                        size: 15.sp,
+                                        color: Colors.white,
+                                      ),
+                                      Text(
+                                        "AR",
+                                        style: Styles.mediumTextBoldWhite,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
                         ),
                       ),
                       SizedBox(

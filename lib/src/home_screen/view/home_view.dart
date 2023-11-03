@@ -1,3 +1,4 @@
+import 'package:arproject/src/appdrawer_screen/drawer_view.dart';
 import 'package:arproject/src/home_screen/controller/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -5,7 +6,8 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import '../../../config/textstyles.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-// import '../../ar_screen/ar_view.dart';
+import 'package:badges/badges.dart' as badges;
+import '../../cart_screen/view/cart_view.dart';
 import '../../product_screen/view/product_view.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -22,13 +24,31 @@ class HomeView extends GetView<HomeController> {
         centerTitle: true,
         title: Image.asset('assets/images/logoappbar.png'),
         actions: [
-          const Icon(Icons.shopping_bag_outlined),
+          Obx(
+            () => controller.cartCount.value > 0
+                ? Padding(
+                    padding: EdgeInsets.only(top: 1.6.h),
+                    child: InkWell(
+                        onTap: () {
+                          Get.to(() => const CartView());
+                        },
+                        child: badges.Badge(
+                            badgeContent:
+                                Text(controller.cartCount.value.toString()),
+                            child: const Icon(Icons.shopping_bag_outlined))),
+                  )
+                : InkWell(
+                    onTap: () {
+                      Get.to(() => const CartView());
+                    },
+                    child: const Icon(Icons.shopping_bag_outlined)),
+          ),
           SizedBox(
             width: 5.w,
           )
         ],
       ),
-      drawer: const Drawer(),
+      drawer: AppDrawer.showAppDrawer(),
       body: SizedBox(
         height: 100.h,
         width: 100.w,
@@ -50,11 +70,6 @@ class HomeView extends GetView<HomeController> {
                         padding: EdgeInsets.only(left: 3.w, right: 3.w),
                         child: InkWell(
                           onTap: () {
-                            // Get.to(() => const MyWidget());
-                            // Get.to(() => const LocalAndWebObjectsWidget(
-                            //       urlModel:
-                            //           'https://firebasestorage.googleapis.com/v0/b/arecommerce-c4c25.appspot.com/o/sofani.glb?alt=media&token=d0361984-3642-4c0d-8271-b0dcf44990d1&_gl=1*w3hovj*_ga*MTEwNDMyMTk3LjE2OTgzMzk3OTk.*_ga_CW55HF8NVT*MTY5ODg1MDAzNy4xMy4xLjE2OTg4NTAwODQuMTMuMC4w',
-                            //     ));
                             Get.to(() => const ProductView(), arguments: {
                               'product': controller.productListNew[index]
                             });

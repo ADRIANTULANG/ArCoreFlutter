@@ -1,3 +1,4 @@
+import 'package:arproject/services/getstorage_services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,8 +12,10 @@ void main() async {
           apiKey: 'AIzaSyAvYyXfpmO5nftCx75AtqTIMwC0sOkoQ2Q',
           appId: '1:1012971008972:android:e04643195dc07f80792369',
           messagingSenderId: '1012971008972',
+          storageBucket: "arecommerce-c4c25.appspot.com",
           projectId: 'arecommerce-c4c25'));
   // Get.put(NotificationServices());
+  Get.put(StorageServices());
 
   runApp(const MyApp());
 }

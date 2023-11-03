@@ -10,6 +10,12 @@ class Styles {
       fontWeight: FontWeight.normal, fontSize: 13.sp, fontFamily: 'Bariol');
   static TextStyle mediumTextBold = TextStyle(
       fontWeight: FontWeight.bold, fontSize: 13.sp, fontFamily: 'Bariol');
+
+  static TextStyle mediumTextBoldWhite = TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 13.sp,
+      fontFamily: 'Bariol',
+      color: Colors.white);
   static TextStyle priceText = TextStyle(
       color: Colors.lightBlue,
       fontWeight: FontWeight.normal,

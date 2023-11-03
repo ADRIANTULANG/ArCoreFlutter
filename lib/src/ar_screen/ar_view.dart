@@ -11,15 +11,14 @@ import 'package:sizer/sizer.dart';
 import 'package:vector_math/vector_math_64.dart';
 import 'package:flutter/material.dart';
 
-class LocalAndWebObjectsWidget extends StatefulWidget {
-  const LocalAndWebObjectsWidget({super.key, required this.urlModel});
+class ARview extends StatefulWidget {
+  const ARview({super.key, required this.urlModel});
   final String urlModel;
   @override
-  State<LocalAndWebObjectsWidget> createState() =>
-      _LocalAndWebObjectsWidgetState();
+  State<ARview> createState() => _ARviewWidgetState();
 }
 
-class _LocalAndWebObjectsWidgetState extends State<LocalAndWebObjectsWidget> {
+class _ARviewWidgetState extends State<ARview> {
   ARSessionManager? arSessionManager;
   ARObjectManager? arObjectManager;
   ARNode? localObjectNode;

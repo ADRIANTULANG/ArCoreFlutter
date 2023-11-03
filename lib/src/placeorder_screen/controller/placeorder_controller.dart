@@ -1,3 +1,5 @@
+import 'package:arproject/src/cart_screen/controller/cart_controller.dart';
+import 'package:arproject/src/home_screen/controller/home_controller.dart';
 import 'package:arproject/src/order_screen/controller/order_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../model/products_model.dart';
+import '../../../services/getstorage_services.dart';
 import '../../bottomnavigation_screen/controller/bottomnavigation_controller.dart';
 
 class PlaceOrderController extends GetxController {
@@ -73,16 +76,32 @@ class PlaceOrderController extends GetxController {
         "status": "Pending",
         "dateTime": Timestamp.now()
       });
-      Get.back();
-      Get.back();
+      if (Get.isRegistered<CartController>() == true) {
+        await removeItemFromCart();
+        Get.back();
+        Get.back();
+        Get.back();
+      } else {
+        Get.back();
+        Get.back();
+      }
       Get.snackbar("Message", "Successfully placed order",
           backgroundColor: Colors.lightBlue, colorText: Colors.white);
       Get.find<BottomNavigationController>().currentSelectedIndex.value = 1;
       Get.find<OrderController>().getOrders();
+      Get.find<HomeController>().getCartItems();
     } catch (e) {
       Get.snackbar("Message", "Something went wrong please try again later. $e",
           backgroundColor: Colors.red, colorText: Colors.white);
     }
     isLoading(false);
+  }
+
+  removeItemFromCart() async {
+    if (Get.find<StorageServices>().storage.read('cart') != null) {
+      List cartList = Get.find<StorageServices>().storage.read('cart');
+      cartList.removeWhere((element) => element['id'] == product.id);
+      Get.find<StorageServices>().saveToCart(cartList: cartList);
+    }
   }
 }

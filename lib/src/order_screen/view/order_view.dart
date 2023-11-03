@@ -1,10 +1,13 @@
+import 'package:arproject/src/cart_screen/view/cart_view.dart';
+import 'package:arproject/src/home_screen/controller/home_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:badges/badges.dart' as badges;
 import '../../../config/textstyles.dart';
+import '../../appdrawer_screen/drawer_view.dart';
 import '../controller/order_controller.dart';
 
 class OrderView extends GetView<OrderController> {
@@ -19,13 +22,33 @@ class OrderView extends GetView<OrderController> {
         centerTitle: true,
         title: Image.asset('assets/images/logoappbar.png'),
         actions: [
-          const Icon(Icons.shopping_bag_outlined),
+          Obx(
+            () => Get.find<HomeController>().cartCount.value > 0
+                ? Padding(
+                    padding: EdgeInsets.only(top: 1.6.h),
+                    child: InkWell(
+                        onTap: () {
+                          Get.to(() => const CartView());
+                        },
+                        child: badges.Badge(
+                            badgeContent: Text(Get.find<HomeController>()
+                                .cartCount
+                                .value
+                                .toString()),
+                            child: const Icon(Icons.shopping_bag_outlined))),
+                  )
+                : InkWell(
+                    onTap: () {
+                      Get.to(() => const CartView());
+                    },
+                    child: const Icon(Icons.shopping_bag_outlined)),
+          ),
           SizedBox(
             width: 5.w,
           )
         ],
       ),
-      drawer: const Drawer(),
+      drawer: AppDrawer.showAppDrawer(),
       body: SizedBox(
         child: Padding(
           padding: EdgeInsets.only(left: 5.w, right: 5.w),
