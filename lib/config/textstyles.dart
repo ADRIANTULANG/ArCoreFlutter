@@ -4,6 +4,10 @@ import 'package:sizer/sizer.dart';
 class Styles {
   static TextStyle header1 = TextStyle(
       fontWeight: FontWeight.bold, fontSize: 20.sp, fontFamily: 'Bariol');
+  static TextStyle header2 = TextStyle(
+      fontWeight: FontWeight.bold, fontSize: 17.sp, fontFamily: 'Bariol');
+  static TextStyle header3 = TextStyle(
+      fontWeight: FontWeight.bold, fontSize: 15.sp, fontFamily: 'Bariol');
   static TextStyle smalltext = TextStyle(
       fontWeight: FontWeight.bold, fontSize: 10.sp, fontFamily: 'Bariol');
   static TextStyle mediumTextNormal = TextStyle(
