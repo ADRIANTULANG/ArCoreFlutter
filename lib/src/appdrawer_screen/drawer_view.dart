@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
+import '../home_screen/widget/home_alertdialogs.dart';
 import '../orderhistory_screen/view/orderhistory_view.dart';
 
 class AppDrawer {
@@ -62,7 +63,10 @@ class AppDrawer {
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Log out'),
-            onTap: () async {},
+            onTap: () async {
+              Get.back();
+              HomeScreenAlertDialog.showLogoutConfirmation();
+            },
           ),
         ],
       ),

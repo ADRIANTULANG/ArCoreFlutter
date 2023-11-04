@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
+import '../../admin_bottomnavigation_screen/view/admin_bottomnavigation_view.dart';
 import '../../home_screen/view/home_view.dart';
 
 class LoginController extends GetxController {
@@ -98,7 +98,8 @@ class LoginController extends GetxController {
           "lastname": "",
           "contactno": "",
           "fcmToken": "",
-          "address": ""
+          "address": "",
+          "isOnline": false
         });
       }
     } catch (e) {
@@ -118,5 +119,23 @@ class LoginController extends GetxController {
       Get.snackbar(
           "Message", "Something went wrong please try again later. $e");
     }
+  }
+
+  loginAdmin({required String code}) async {
+    try {
+      var res = await FirebaseFirestore.instance
+          .collection('admin')
+          .where('isActive', isEqualTo: true)
+          .where('code', isEqualTo: code)
+          .limit(1)
+          .get();
+      var admin = res.docs;
+      if (admin.isNotEmpty) {
+        Get.to(() => const AdminBottomNavigationView());
+      } else {
+        Get.snackbar("Message", "Invalid Code",
+            backgroundColor: Colors.red, colorText: Colors.white);
+      }
+    } catch (_) {}
   }
 }

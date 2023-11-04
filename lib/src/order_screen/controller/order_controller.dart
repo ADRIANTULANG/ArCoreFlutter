@@ -37,7 +37,7 @@ class OrderController extends GetxController {
     var res = await firebase
         .collection('orders')
         .where('orderedBy', isEqualTo: userDocumentID!)
-        .where('status', isEqualTo: "Pending")
+        .where('status', whereIn: ["Pending", "Accepted", "On Delivery"])
         .orderBy('dateTime', descending: true)
         .get();
     var orders = res.docs;

@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../model/chat_model.dart';
 
-class ChatController extends GetxController {
+class AdminChatController extends GetxController {
   TextEditingController message = TextEditingController();
   ScrollController scrollController = ScrollController();
   final firebase = FirebaseFirestore.instance;
@@ -15,32 +14,25 @@ class ChatController extends GetxController {
   Stream? streamChats;
   StreamSubscription<dynamic>? listener;
   RxString orderID = ''.obs;
+  RxString customerUserID = ''.obs;
+  RxString customerDocumentID = ''.obs;
   RxList<Chats> chatList = <Chats>[].obs;
 
   @override
   void onInit() async {
     orderID.value = await Get.arguments['orderID'];
+    customerUserID.value = await Get.arguments['customerUserID'];
+    customerDocumentID.value = await Get.arguments['customerDocumentID'];
+
     await getUserDetails();
     super.onInit();
   }
 
   getUserDetails() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    var res = await firebase
-        .collection('users')
-        .where('userid', isEqualTo: user!.uid)
-        .limit(1)
-        .get();
+    userDocumentReference =
+        firebase.collection('users').doc(customerDocumentID.value);
 
-    if (res.docs.isNotEmpty) {
-      userDocumentReference = firebase.collection('users').doc(res.docs[0].id);
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userDocumentReference!.id)
-          .update({"isOnline": true});
-      listenToChanges(userDocumentReference: userDocumentReference!);
-    }
+    listenToChanges(userDocumentReference: userDocumentReference!);
   }
 
   listenToChanges(
@@ -86,7 +78,7 @@ class ChatController extends GetxController {
         "datetime": Timestamp.now(),
         "message": chat,
         "orderID": orderID.value.toString(),
-        "sender": userDocumentReference!.id,
+        "sender": "Admin",
       });
       message.clear();
       Future.delayed(const Duration(seconds: 1), () {

@@ -68,7 +68,7 @@ class LoginView extends GetView<LoginController> {
                       style: Styles.header1,
                     ),
                     SizedBox(
-                      height: 10.h,
+                      height: 5.h,
                     ),
                     Container(
                       padding: EdgeInsets.only(left: 5.w, right: 5.w),
@@ -126,7 +126,7 @@ class LoginView extends GetView<LoginController> {
                       ),
                     ),
                     SizedBox(
-                      height: 5.h,
+                      height: 3.h,
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 5.w, right: 5.w),
@@ -167,7 +167,7 @@ class LoginView extends GetView<LoginController> {
                       ),
                     ),
                     SizedBox(
-                      height: 5.h,
+                      height: 3.h,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -191,7 +191,7 @@ class LoginView extends GetView<LoginController> {
                       ],
                     ),
                     SizedBox(
-                      height: 5.h,
+                      height: 3.h,
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 5.w, right: 5.w),
@@ -218,6 +218,49 @@ class LoginView extends GetView<LoginController> {
                                 ),
                                 Text(
                                   "Sign in with Google",
+                                  style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 11.sp,
+                                      fontWeight: FontWeight.w700),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                      child: InkWell(
+                        onTap: () async {
+                          LoginAlertdialog.showDialogAdminLogin(
+                              controller: controller);
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 6.h,
+                          width: 100.w,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: Colors.black),
+                              color: Colors.white),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.admin_panel_settings_sharp,
+                                  color: Colors.pink[50],
+                                ),
+                                SizedBox(
+                                  width: 3.w,
+                                ),
+                                Text(
+                                  "Continue as Admin",
                                   style: TextStyle(
                                       color: Colors.grey,
                                       fontSize: 11.sp,

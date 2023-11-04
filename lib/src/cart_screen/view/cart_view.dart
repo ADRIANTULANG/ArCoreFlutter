@@ -100,15 +100,16 @@ class CartView extends GetView<CartController> {
                                   width: 53.w,
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      color: Colors.red[900],
-                                      boxShadow: const [
-                                        BoxShadow(
-                                            color: Colors.grey,
-                                            blurRadius: 5,
-                                            spreadRadius: 3,
-                                            offset: Offset(1, 2))
-                                      ]),
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: Colors.red[900],
+                                    boxShadow: const [
+                                      BoxShadow(
+                                          color: Colors.grey,
+                                          blurRadius: 5,
+                                          spreadRadius: 3,
+                                          offset: Offset(1, 2))
+                                    ],
+                                  ),
                                   child: Text(
                                     "Buy",
                                     style: Styles.mediumTextBoldWhite,
