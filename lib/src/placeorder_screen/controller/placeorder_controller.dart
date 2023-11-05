@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import '../../../model/products_model.dart';
 import '../../../services/getstorage_services.dart';
 import '../../bottomnavigation_screen/controller/bottomnavigation_controller.dart';
+import '../../search_screen/controller/search_controller.dart';
 
 class PlaceOrderController extends GetxController {
   final firebase = FirebaseFirestore.instance;
@@ -78,6 +79,10 @@ class PlaceOrderController extends GetxController {
       });
       if (Get.isRegistered<CartController>() == true) {
         await removeItemFromCart();
+        Get.back();
+        Get.back();
+        Get.back();
+      } else if (Get.isRegistered<SearchProductController>() == true) {
         Get.back();
         Get.back();
         Get.back();

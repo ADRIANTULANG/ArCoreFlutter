@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:arproject/src/appdrawer_screen/drawer_view.dart';
 import 'package:arproject/src/home_screen/controller/home_controller.dart';
+import 'package:arproject/src/search_screen/view/search_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
@@ -55,6 +58,40 @@ class HomeView extends GetView<HomeController> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              SizedBox(
+                height: 2.h,
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                height: 7.h,
+                width: 100.w,
+                child: TextField(
+                  controller: controller.search,
+                  onChanged: (value) {
+                    if (controller.debounce?.isActive ?? false) {
+                      controller.debounce!.cancel();
+                    }
+                    controller.debounce =
+                        Timer(const Duration(milliseconds: 1000), () {
+                      if (controller.search.text.isNotEmpty) {
+                        Get.to(() => const SearchView(), arguments: {
+                          'word': controller.search.text,
+                          'products': controller.productListAll
+                        });
+                        controller.search.clear();
+                        FocusScope.of(context).unfocus();
+                      }
+                    });
+                  },
+                  decoration: InputDecoration(
+                      contentPadding: EdgeInsets.only(left: 3.w),
+                      alignLabelWithHint: false,
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                      hintText: 'Search Product',
+                      hintStyle: const TextStyle(fontFamily: 'Bariol')),
+                ),
+              ),
               SizedBox(
                 height: 2.h,
               ),

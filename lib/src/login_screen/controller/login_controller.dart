@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../admin_bottomnavigation_screen/view/admin_bottomnavigation_view.dart';
-import '../../home_screen/view/home_view.dart';
+import '../../bottomnavigation_screen/view/bottomnavigation_view.dart';
 
 class LoginController extends GetxController {
   TextEditingController email = TextEditingController();
@@ -19,7 +19,7 @@ class LoginController extends GetxController {
           email: email.text, password: password.text);
       var user = auth.currentUser!;
       if (user.emailVerified) {
-        Get.offAll(() => const HomeView());
+        Get.offAll(() => const BottomNavView());
       } else {
         Get.back();
         Get.snackbar("Message",
@@ -73,7 +73,7 @@ class LoginController extends GetxController {
         await saveUser(
             email: userCredential.user!.email.toString(),
             userid: userCredential.user!.uid);
-        Get.offAll(() => const HomeView());
+        Get.offAll(() => const BottomNavView());
       }
     } catch (e) {
       Get.back();

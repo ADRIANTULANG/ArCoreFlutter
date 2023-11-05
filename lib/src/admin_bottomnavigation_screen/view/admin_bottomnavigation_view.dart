@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../admin_addproducts_screen/view/admin_addproducts_view.dart';
 import '../../admin_home_screen/controller/admin_home_controller.dart';
 
 class AdminBottomNavigationView
@@ -63,7 +64,9 @@ class AdminBottomNavigationView
               side: const BorderSide(width: 3, color: Colors.white),
               borderRadius: BorderRadius.circular(100)),
           backgroundColor: Colors.lightBlue[100],
-          onPressed: () {},
+          onPressed: () {
+            Get.to(() => const AdminAddProductsView());
+          },
           child: const Icon(
             Icons.add_circle_outline_sharp,
             color: Colors.white,

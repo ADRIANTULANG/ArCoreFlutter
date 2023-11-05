@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:arproject/model/products_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../services/getstorage_services.dart';
@@ -9,7 +11,9 @@ class HomeController extends GetxController {
   final firebase = FirebaseFirestore.instance;
   RxList<Products> productListNew = <Products>[].obs;
   RxList<Products> productListAll = <Products>[].obs;
+  TextEditingController search = TextEditingController();
   RxInt cartCount = 0.obs;
+  Timer? debounce;
 
   @override
   void onInit() {
