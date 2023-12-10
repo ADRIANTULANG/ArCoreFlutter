@@ -1,6 +1,9 @@
 import 'package:arproject/src/home_screen/view/home_view.dart';
 import 'package:arproject/src/order_screen/view/order_view.dart';
 import 'package:arproject/src/profile_screen/view/profile_view.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 
 class BottomNavigationController extends GetxController {
@@ -11,4 +14,25 @@ class BottomNavigationController extends GetxController {
     const OrderView(),
     const ProfileView(),
   ];
+
+  updateFcmToken() async {
+    String userID = FirebaseAuth.instance.currentUser!.uid;
+    var res = await FirebaseFirestore.instance
+        .collection('users')
+        .where('userid', isEqualTo: userID)
+        .get();
+    if (res.docs.isNotEmpty) {
+      String? token = await FirebaseMessaging.instance.getToken();
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(res.docs[0].id)
+          .update({"fcmToken": token});
+    }
+  }
+
+  @override
+  void onInit() {
+    updateFcmToken();
+    super.onInit();
+  }
 }

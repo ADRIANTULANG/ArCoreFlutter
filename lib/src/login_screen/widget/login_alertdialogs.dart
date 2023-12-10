@@ -31,7 +31,11 @@ class LoginAlertdialog {
                       SizedBox(
                         height: 1.h,
                       ),
-                      const Text("Loading...")
+                      InkWell(
+                          onTap: () {
+                            Get.back();
+                          },
+                          child: const Text("Loading..."))
                     ],
                   )),
             ),

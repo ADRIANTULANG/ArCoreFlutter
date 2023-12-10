@@ -1,4 +1,5 @@
 import 'package:arproject/src/product_screen/controller/product_controller.dart';
+import 'package:arproject/src/product_screen/widget/product_alertdialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -36,8 +37,24 @@ class ProductView extends GetView<ProductController> {
             ),
           ),
           SizedBox(
+            width: 3.w,
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 2.3.h),
+            child: InkWell(
+              onTap: () {
+                ProductScreenAlertDialog.showRating(controller: controller);
+              },
+              child: FaIcon(
+                FontAwesomeIcons.trophy,
+                color: Colors.yellow,
+                size: 17.sp,
+              ),
+            ),
+          ),
+          SizedBox(
             width: 5.w,
-          )
+          ),
         ],
       ),
       body: Obx(
@@ -119,7 +136,53 @@ class ProductView extends GetView<ProductController> {
                                   ),
                                 ),
                               ),
-                            )
+                            ),
+                            controller
+                                        .getRates(
+                                            ratings: controller.product.rate)
+                                        .value ==
+                                    "0"
+                                ? const SizedBox()
+                                : Positioned(
+                                    top: 1.h,
+                                    left: 18.w,
+                                    child: InkWell(
+                                      onTap: () {
+                                        Get.to(() => ARview(
+                                            urlModel:
+                                                controller.product.arFile));
+                                      },
+                                      child: Container(
+                                        height: 4.h,
+                                        width: 15.w,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            color: Colors.white),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Obx(
+                                              () => Text(
+                                                controller
+                                                    .getRates(
+                                                        ratings: controller
+                                                            .product.rate)
+                                                    .value,
+                                                style: Styles.mediumTextBold,
+                                              ),
+                                            ),
+                                            Icon(
+                                              Icons.star,
+                                              size: 15.sp,
+                                              color: Colors.yellow,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  )
                           ],
                         ),
                       ),
@@ -138,6 +201,13 @@ class ProductView extends GetView<ProductController> {
                         child: Text(
                           "₱ ${controller.product.price.toString()}",
                           style: Styles.priceText,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        child: Text(
+                          "Stocks: ${controller.product.stocks.toString()} pcs.",
+                          style: Styles.smalltextGrey,
                         ),
                       ),
                       SizedBox(
@@ -225,6 +295,122 @@ class ProductView extends GetView<ProductController> {
                       ),
                       SizedBox(
                         height: 2.h,
+                      ),
+                      Container(
+                        height: 1.5.h,
+                        width: 100.w,
+                        color: Colors.grey[200],
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        child: Text(
+                          "Ratings & Comments",
+                          style: Styles.mediumTextBold,
+                        ),
+                      ),
+                      controller.product.rate.isNotEmpty
+                          ? Padding(
+                              padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: controller.product.rate.length,
+                                itemBuilder:
+                                    (BuildContext context, int rateindex) {
+                                  return Padding(
+                                    padding: EdgeInsets.only(top: 1.h),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Container(
+                                              height: 10.h,
+                                              width: 10.w,
+                                              decoration: const BoxDecoration(
+                                                  color: Colors.lightBlue,
+                                                  shape: BoxShape.circle),
+                                              child: Center(
+                                                child: Text(
+                                                  controller
+                                                      .product
+                                                      .rate[rateindex]
+                                                      .email[0]
+                                                      .capitalizeFirst
+                                                      .toString(),
+                                                  style: Styles
+                                                      .mediumTextBoldWhite,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 2.w,
+                                            ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  controller.product
+                                                      .rate[rateindex].email,
+                                                  style:
+                                                      Styles.mediumTextNormal,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      controller.product
+                                                          .rate[rateindex].rate
+                                                          .toString(),
+                                                      style: Styles
+                                                          .mediumTextNormal,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 1.w,
+                                                    ),
+                                                    Icon(
+                                                      Icons.star,
+                                                      color: Colors.yellow,
+                                                      size: 11.sp,
+                                                    )
+                                                  ],
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 5.w, right: 5.w),
+                                          child: Text(
+                                            controller.product.rate[rateindex]
+                                                .comment,
+                                            style: Styles.mediumTextNormal,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            )
+                          : SizedBox(
+                              child: Center(
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: 3.h),
+                                  child: Text(
+                                    "No comments or reviews for this product.",
+                                    style: Styles.mediumTextNormal,
+                                  ),
+                                ),
+                              ),
+                            ),
+                      SizedBox(
+                        height: 3.h,
                       ),
                     ],
                   ),

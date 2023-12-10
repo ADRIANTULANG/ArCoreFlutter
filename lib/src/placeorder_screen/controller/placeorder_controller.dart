@@ -1,19 +1,28 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:arproject/src/cart_screen/controller/cart_controller.dart';
 import 'package:arproject/src/home_screen/controller/home_controller.dart';
 import 'package:arproject/src/order_screen/controller/order_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../model/products_model.dart';
 import '../../../services/getstorage_services.dart';
 import '../../bottomnavigation_screen/controller/bottomnavigation_controller.dart';
+import '../../orderdetail_screen/controller/orderdetail_controller.dart';
 import '../../search_screen/controller/search_controller.dart';
 
 class PlaceOrderController extends GetxController {
   final firebase = FirebaseFirestore.instance;
   Products product = Products(
+      stocks: "0",
+      colors: [],
+      rate: <Rate>[],
       image: "",
       price: 0.0,
       name: "",
@@ -25,13 +34,18 @@ class PlaceOrderController extends GetxController {
       id: "",
       arFile: "");
   RxBool isLoading = true.obs;
-  RxString groupValue = ''.obs;
+  RxString groupWoodTypeValue = ''.obs;
+  RxString groupColorTypeValue = ''.obs;
 
   TextEditingController address = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController contactno = TextEditingController();
 
   DocumentReference<Map<String, dynamic>>? userDocumentID;
+
+  RxList proofImageList = [].obs;
+
+  ImagePicker picker = ImagePicker();
 
   @override
   void onInit() async {
@@ -62,11 +76,26 @@ class PlaceOrderController extends GetxController {
   placeOrder() async {
     isLoading(true);
     try {
+      List proofPaymentUrlList = [];
+      for (var i = 0; i < proofImageList.length; i++) {
+        var modeluint8list =
+            Uint8List.fromList(File(proofImageList[i]).readAsBytesSync());
+        String fileName = proofImageList[i].split('/').last;
+        final ref =
+            FirebaseStorage.instance.ref().child("proofpayments/$fileName");
+        var uploadTask = ref.putData(modeluint8list);
+        final snapshot = await uploadTask.whenComplete(() {});
+        var modelLink = await snapshot.ref.getDownloadURL();
+        proofPaymentUrlList.add(modelLink);
+      }
+
       double totalPrice = product.quantity.value * product.price;
       await firebase.collection('orders').add({
-        "woodType": groupValue.value,
+        "productID": product.id,
+        "woodType": groupWoodTypeValue.value,
         "orderedBy": userDocumentID!,
         "productname": product.name,
+        "color": groupColorTypeValue.value,
         "quantity": product.quantity.value,
         "price": product.price,
         "totalPrice": totalPrice,
@@ -75,7 +104,8 @@ class PlaceOrderController extends GetxController {
         "userAddress": address.text,
         "userContactno": contactno.text,
         "status": "Pending",
-        "dateTime": Timestamp.now()
+        "dateTime": Timestamp.now(),
+        "proofPaymentUrlList": proofPaymentUrlList
       });
       if (Get.isRegistered<CartController>() == true) {
         await removeItemFromCart();
@@ -84,6 +114,9 @@ class PlaceOrderController extends GetxController {
         Get.back();
       } else if (Get.isRegistered<SearchProductController>() == true) {
         Get.back();
+        Get.back();
+        Get.back();
+      } else if (Get.isRegistered<OrderDetailController>() == true) {
         Get.back();
         Get.back();
       } else {
@@ -107,6 +140,13 @@ class PlaceOrderController extends GetxController {
       List cartList = Get.find<StorageServices>().storage.read('cart');
       cartList.removeWhere((element) => element['id'] == product.id);
       Get.find<StorageServices>().saveToCart(cartList: cartList);
+    }
+  }
+
+  pickImageFromGallery() async {
+    List<XFile> images = await picker.pickMultiImage();
+    for (var i = 0; i < images.length; i++) {
+      proofImageList.add(images[i].path);
     }
   }
 }

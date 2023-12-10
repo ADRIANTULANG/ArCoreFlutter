@@ -12,6 +12,7 @@ class Chats {
   String orderId;
   String sender;
   String message;
+  bool isText;
 
   Chats({
     required this.datetime,
@@ -19,12 +20,14 @@ class Chats {
     required this.orderId,
     required this.sender,
     required this.message,
+    required this.isText,
   });
 
   factory Chats.fromJson(Map<String, dynamic> json) => Chats(
         datetime: DateTime.parse(json["datetime"]),
         customerDetail: CustomerDetail.fromJson(json["customerDetail"]),
         orderId: json["orderID"],
+        isText: json["isText"],
         sender: json["sender"],
         message: json["message"],
       );
@@ -33,6 +36,7 @@ class Chats {
         "datetime": datetime.toIso8601String(),
         "customerDetail": customerDetail.toJson(),
         "orderID": orderId,
+        "isText": isText,
         "sender": sender,
         "message": message,
       };

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:arproject/src/placeorder_screen/controller/placeorder_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -220,11 +222,12 @@ class PlaceOrderView extends GetView<PlaceOrderController> {
                                   padding: EdgeInsets.only(top: .5.h),
                                   child: Obx(
                                     () => Radio(
-                                      groupValue: controller.groupValue.value,
+                                      groupValue:
+                                          controller.groupWoodTypeValue.value,
                                       value:
                                           controller.product.woodTypes[index],
                                       onChanged: (value) {
-                                        controller.groupValue.value =
+                                        controller.groupWoodTypeValue.value =
                                             controller.product.woodTypes[index];
                                       },
                                     ),
@@ -235,6 +238,64 @@ class PlaceOrderView extends GetView<PlaceOrderController> {
                                 ),
                                 Text(
                                   controller.product.woodTypes[index],
+                                  style: Styles.mediumTextNormal,
+                                )
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      Container(
+                        height: 1.5.h,
+                        width: 100.w,
+                        color: Colors.grey[200],
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        child: Text(
+                          "Color Types",
+                          style: Styles.mediumTextBold,
+                        ),
+                      ),
+                      SizedBox(
+                        height: .5.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: controller.product.colors.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(top: .5.h),
+                                  child: Obx(
+                                    () => Radio(
+                                      groupValue:
+                                          controller.groupColorTypeValue.value,
+                                      value: controller.product.colors[index],
+                                      onChanged: (value) {
+                                        controller.groupColorTypeValue.value =
+                                            controller.product.colors[index];
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 2.w,
+                                ),
+                                Text(
+                                  controller.product.colors[index],
                                   style: Styles.mediumTextNormal,
                                 )
                               ],
@@ -373,6 +434,107 @@ class PlaceOrderView extends GetView<PlaceOrderController> {
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Payment Proof",
+                              style: Styles.mediumTextBold,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                controller.pickImageFromGallery();
+                              },
+                              child: const Icon(
+                                Icons.image_search_rounded,
+                                color: Colors.lightBlue,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Obx(
+                        () => controller.proofImageList.isEmpty
+                            ? const SizedBox()
+                            : SizedBox(
+                                height: 13.h,
+                                width: 100.w,
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 2.w, top: 2.h),
+                                  child: Obx(
+                                    () => ListView.builder(
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount:
+                                          controller.proofImageList.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return Padding(
+                                          padding: EdgeInsets.only(left: 2.w),
+                                          child: Stack(
+                                            children: [
+                                              Container(
+                                                height: 10.h,
+                                                width: 30.w,
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(),
+                                                  image: DecorationImage(
+                                                    image: FileImage(
+                                                      File(controller
+                                                              .proofImageList[
+                                                          index]),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Positioned(
+                                                right: 1.w,
+                                                bottom: 6.h,
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    controller.proofImageList
+                                                        .removeAt(index);
+                                                  },
+                                                  child: Container(
+                                                    height: 6.h,
+                                                    width: 6.w,
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            color: Colors.red),
+                                                    child: Center(
+                                                      child: Icon(
+                                                        Icons.clear,
+                                                        color: Colors.white,
+                                                        size: 12.sp,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      Container(
+                        height: 1.5.h,
+                        width: 100.w,
+                        color: Colors.grey[200],
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
                         child: SizedBox(
                           width: 100.w,
                           height: 7.h,
@@ -391,9 +553,20 @@ class PlaceOrderView extends GetView<PlaceOrderController> {
                                         side: const BorderSide(
                                             color: Colors.white)))),
                             onPressed: () {
-                              if (controller.groupValue.value == '') {
+                              if (controller.groupWoodTypeValue.value == '') {
                                 Get.snackbar(
                                     "Message", "Please select wood type.",
+                                    backgroundColor: Colors.lightBlue,
+                                    colorText: Colors.white);
+                              } else if (controller.groupColorTypeValue.value ==
+                                  '') {
+                                Get.snackbar(
+                                    "Message", "Please select color type.",
+                                    backgroundColor: Colors.lightBlue,
+                                    colorText: Colors.white);
+                              } else if (controller.proofImageList.isEmpty) {
+                                Get.snackbar("Message",
+                                    "Please upload atleast one payment proof.",
                                     backgroundColor: Colors.lightBlue,
                                     colorText: Colors.white);
                               } else if (controller.email.text.isEmail ==

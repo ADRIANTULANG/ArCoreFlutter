@@ -14,10 +14,14 @@ class AdminAddProductsController extends GetxController {
   TextEditingController productprice = TextEditingController();
   TextEditingController productdescription = TextEditingController();
   TextEditingController woodText = TextEditingController();
+  TextEditingController colorText = TextEditingController();
   TextEditingController specificationText = TextEditingController();
+  TextEditingController stocks = TextEditingController();
 
   RxList<String> woodTypesList = <String>[].obs;
+  RxList<String> colorTypesList = <String>[].obs;
   RxList<String> specificationList = <String>[].obs;
+
   RxBool isUploading = false.obs;
 
   final ImagePicker picker = ImagePicker();
@@ -90,7 +94,9 @@ class AdminAddProductsController extends GetxController {
         "name": productname.text,
         "price": double.parse(productprice.text.toString()),
         "specifications": specificationList,
-        "woodTypes": woodTypesList
+        "woodTypes": woodTypesList,
+        "stocks": stocks.text,
+        "colors": colorTypesList
       });
       Get.back();
       Get.snackbar("Message", "Product added.",

@@ -37,26 +37,48 @@ class ChatView extends GetView<ChatController> {
                               right: 14,
                               top: 10,
                             ),
-                            child: Align(
-                              alignment:
-                                  (controller.chatList[index].sender == "Admin"
-                                      ? Alignment.topLeft
-                                      : Alignment.topRight),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: (controller.chatList[index].sender ==
-                                          "Admin"
-                                      ? Colors.grey.shade200
-                                      : Colors.orange[200]),
-                                ),
-                                padding: const EdgeInsets.all(16),
-                                child: Text(
-                                  controller.chatList[index].message,
-                                  style: const TextStyle(fontSize: 15),
-                                ),
-                              ),
-                            ),
+                            child: controller.chatList[index].isText == true
+                                ? Align(
+                                    alignment:
+                                        (controller.chatList[index].sender ==
+                                                "Admin"
+                                            ? Alignment.topLeft
+                                            : Alignment.topRight),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: (controller
+                                                    .chatList[index].sender ==
+                                                "Admin"
+                                            ? Colors.grey.shade200
+                                            : Colors.orange[200]),
+                                      ),
+                                      padding: const EdgeInsets.all(16),
+                                      child: Text(
+                                        controller.chatList[index].message,
+                                        style: const TextStyle(fontSize: 15),
+                                      ),
+                                    ),
+                                  )
+                                : Align(
+                                    alignment:
+                                        (controller.chatList[index].sender ==
+                                                "Admin"
+                                            ? Alignment.topLeft
+                                            : Alignment.topRight),
+                                    child: Container(
+                                      height: 30.h,
+                                      width: 50.w,
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          image: DecorationImage(
+                                              image: NetworkImage(controller
+                                                  .chatList[index].message))),
+                                      padding: const EdgeInsets.all(16),
+                                    ),
+                                  ),
                           ),
                           Padding(
                             padding: EdgeInsets.only(
@@ -98,7 +120,7 @@ class ChatView extends GetView<ChatController> {
                 children: [
                   SizedBox(
                     height: 6.h,
-                    width: 85.w,
+                    width: 70.w,
                     child: TextField(
                       controller: controller.message,
                       decoration: InputDecoration(
@@ -111,6 +133,11 @@ class ChatView extends GetView<ChatController> {
                           hintText: 'Type something..'),
                     ),
                   ),
+                  InkWell(
+                      onTap: () {
+                        controller.getImage();
+                      },
+                      child: const Icon(Icons.attachment)),
                   InkWell(
                       onTap: () {
                         controller.sendMessage(chat: controller.message.text);

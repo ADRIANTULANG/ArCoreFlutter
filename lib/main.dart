@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+import 'services/notification_services.dart';
 import 'src/chat_screen/controller/chat_controller.dart';
 import 'src/splash_screen/view/splash_view.dart';
 
@@ -17,7 +18,7 @@ void main() async {
           messagingSenderId: '1012971008972',
           storageBucket: "arecommerce-c4c25.appspot.com",
           projectId: 'arecommerce-c4c25'));
-  // Get.put(NotificationServices());
+  Get.put(NotificationServices());
   Get.put(StorageServices());
 
   runApp(const MyApp());

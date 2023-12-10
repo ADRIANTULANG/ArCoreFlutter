@@ -1,11 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../model/chat_model.dart';
+import '../widget/chat_alertdialogs.dart';
 
 class ChatController extends GetxController {
   TextEditingController message = TextEditingController();
@@ -16,6 +21,7 @@ class ChatController extends GetxController {
   StreamSubscription<dynamic>? listener;
   RxString orderID = ''.obs;
   RxList<Chats> chatList = <Chats>[].obs;
+  final ImagePicker picker = ImagePicker();
 
   @override
   void onInit() async {
@@ -79,6 +85,44 @@ class ChatController extends GetxController {
     } catch (_) {}
   }
 
+  getImage() async {
+    List imagesLinks = [];
+    final List<XFile> images = await picker.pickMultiImage();
+    if (images.isNotEmpty) {
+      ChatAlertdialogs.showSendingImages();
+      for (var i = 0; i < images.length; i++) {
+        String filename = images[i].path.split('/').last;
+        final ref = FirebaseStorage.instance.ref().child("files/$filename");
+        Uint8List uint8list =
+            Uint8List.fromList(File(images[i].path).readAsBytesSync());
+        var uploadTask = ref.putData(uint8list);
+        final snapshot = await uploadTask.whenComplete(() {});
+        String imageLink = await snapshot.ref.getDownloadURL();
+        imagesLinks.add(imageLink);
+      }
+      WriteBatch batch = FirebaseFirestore.instance.batch();
+      CollectionReference chatRef =
+          FirebaseFirestore.instance.collection('chat');
+      for (var link in imagesLinks) {
+        DocumentReference docRef = chatRef.doc();
+        batch.set(docRef, {
+          "customerDetail": userDocumentReference!,
+          "datetime": Timestamp.now(),
+          "message": link,
+          "orderID": orderID.value.toString(),
+          "sender": userDocumentReference!.id,
+          "isText": false,
+        });
+      }
+      await batch.commit();
+      Get.back();
+      message.clear();
+      Future.delayed(const Duration(seconds: 1), () {
+        scrollController.jumpTo(scrollController.position.maxScrollExtent);
+      });
+    }
+  }
+
   sendMessage({required String chat}) async {
     try {
       await FirebaseFirestore.instance.collection('chat').add({
@@ -87,6 +131,7 @@ class ChatController extends GetxController {
         "message": chat,
         "orderID": orderID.value.toString(),
         "sender": userDocumentReference!.id,
+        "isText": true,
       });
       message.clear();
       Future.delayed(const Duration(seconds: 1), () {

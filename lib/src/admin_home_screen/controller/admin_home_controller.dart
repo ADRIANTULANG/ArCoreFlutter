@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:arproject/model/products_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -23,11 +24,16 @@ class AdminHomeController extends GetxController {
       for (var i = 0; i < products.length; i++) {
         Map mapData = products[i].data();
         mapData['id'] = products[i].id;
+        if (mapData.containsKey('rate') == false) {
+          mapData['rate'] = [];
+        }
         data.add(mapData);
       }
       productsList.assignAll(productsFromJson(jsonEncode(data)));
       productsListMasterList.assignAll(productsFromJson(jsonEncode(data)));
-    } catch (_) {}
+    } catch (_) {
+      log(_.toString());
+    }
   }
 
   searchProduct({required String word}) async {

@@ -195,6 +195,37 @@ class AdminEditProductsView extends GetView<AdminEditProductsController> {
                       Padding(
                         padding: EdgeInsets.only(left: 5.w, right: 5.w),
                         child: Text(
+                          "Product stocks",
+                          style: Styles.header3,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        height: 7.h,
+                        width: 100.w,
+                        child: TextField(
+                          controller: controller.stocks,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                              fillColor: Colors.lightBlue[50],
+                              filled: true,
+                              contentPadding: EdgeInsets.only(left: 3.w),
+                              alignLabelWithHint: false,
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              hintText: 'Stocks',
+                              hintStyle: const TextStyle(fontFamily: 'Bariol')),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        child: Text(
                           "Product description",
                           style: Styles.header3,
                         ),
@@ -319,6 +350,113 @@ class AdminEditProductsView extends GetView<AdminEditProductsController> {
                                               ),
                                               label: Text(controller
                                                   .woodTypesList[index]),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      Container(
+                        height: 1.5.h,
+                        width: 100.w,
+                        color: Colors.grey[200],
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        child: Text(
+                          "Color Types",
+                          style: Styles.header3,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        child: SizedBox(
+                          height: 7.h,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 6.h,
+                                width: 70.w,
+                                child: TextField(
+                                  controller: controller.colorText,
+                                  decoration: InputDecoration(
+                                    fillColor: Colors.lightBlue[50],
+                                    filled: true,
+                                    contentPadding: EdgeInsets.only(
+                                      left: 3.w,
+                                    ),
+                                    alignLabelWithHint: false,
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(4)),
+                                  ),
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  controller.colorTypesList.add(controller
+                                      .colorText.text.capitalizeFirst
+                                      .toString());
+                                  controller.colorText.clear();
+                                },
+                                child: Container(
+                                    height: 6.h,
+                                    width: 15.w,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                        color: Colors.lightBlue,
+                                        border: Border.all(color: Colors.black),
+                                        borderRadius: BorderRadius.circular(8)),
+                                    child: const Icon(Icons.add)),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5.w),
+                        child: Obx(
+                          () => controller.colorTypesList.isEmpty
+                              ? const SizedBox()
+                              : SizedBox(
+                                  height: 7.h,
+                                  width: 100.w,
+                                  child: Obx(
+                                    () => ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount:
+                                          controller.colorTypesList.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return Padding(
+                                          padding: EdgeInsets.only(right: 2.w),
+                                          child: InkWell(
+                                            onTap: () {
+                                              controller.colorTypesList
+                                                  .removeAt(index);
+                                            },
+                                            child: Chip(
+                                              backgroundColor:
+                                                  Colors.lightBlue[100],
+                                              avatar: const CircleAvatar(
+                                                backgroundColor: Colors.red,
+                                                child: Icon(Icons.clear),
+                                              ),
+                                              label: Text(controller
+                                                  .colorTypesList[index]),
                                             ),
                                           ),
                                         );
@@ -492,6 +630,11 @@ class AdminEditProductsView extends GetView<AdminEditProductsController> {
                               } else if (controller.woodTypesList.isEmpty) {
                                 Get.snackbar("Message",
                                     "Please input at least 1 wood type",
+                                    backgroundColor: Colors.red,
+                                    colorText: Colors.white);
+                              } else if (controller.colorTypesList.isEmpty) {
+                                Get.snackbar("Message",
+                                    "Please input at least 1 color type",
                                     backgroundColor: Colors.red,
                                     colorText: Colors.white);
                               } else if (controller.specificationList.isEmpty) {

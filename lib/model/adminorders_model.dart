@@ -19,7 +19,10 @@ class AdminOrder {
   String userEmail;
   String productimage;
   String status;
+  String productID;
+  String color;
   CustomerDetails customerDetails;
+  List<String> proofPaymentUrlList;
 
   AdminOrder({
     required this.id,
@@ -35,14 +38,19 @@ class AdminOrder {
     required this.productimage,
     required this.status,
     required this.customerDetails,
+    required this.proofPaymentUrlList,
+    required this.productID,
+    required this.color,
   });
 
   factory AdminOrder.fromJson(Map<String, dynamic> json) => AdminOrder(
         userAddress: json["userAddress"],
         dateTime: DateTime.parse(json["dateTime"]),
         quantity: json["quantity"],
+        color: json["color"],
         id: json["id"],
         woodType: json["woodType"],
+        productID: json["productID"],
         totalPrice: double.parse(json["totalPrice"].toString()),
         price: double.parse(json["price"].toString()),
         userContactno: json["userContactno"],
@@ -51,11 +59,15 @@ class AdminOrder {
         productimage: json["productimage"],
         status: json["status"],
         customerDetails: CustomerDetails.fromJson(json["customerDetails"]),
+        proofPaymentUrlList:
+            List<String>.from(json["proofPaymentUrlList"].map((x) => x)),
       );
 
   Map<String, dynamic> toJson() => {
         "userAddress": userAddress,
         "id": id,
+        "color": color,
+        "productID": productID,
         "dateTime": dateTime.toIso8601String(),
         "quantity": quantity,
         "woodType": woodType,
@@ -67,6 +79,7 @@ class AdminOrder {
         "productimage": productimage,
         "status": status,
         "customerDetails": customerDetails.toJson(),
+        "proofPaymentUrlList": proofPaymentUrlList,
       };
 }
 

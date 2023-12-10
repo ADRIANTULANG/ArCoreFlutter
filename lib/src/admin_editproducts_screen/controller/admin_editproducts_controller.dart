@@ -13,10 +13,14 @@ class AdminEditProductsController extends GetxController {
   TextEditingController productprice = TextEditingController();
   TextEditingController productdescription = TextEditingController();
   TextEditingController woodText = TextEditingController();
+  TextEditingController colorText = TextEditingController();
   TextEditingController specificationText = TextEditingController();
+  TextEditingController stocks = TextEditingController();
 
   RxList<String> woodTypesList = <String>[].obs;
   RxList<String> specificationList = <String>[].obs;
+  RxList<String> colorTypesList = <String>[].obs;
+
   RxBool isEditing = false.obs;
 
   final ImagePicker picker = ImagePicker();
@@ -41,9 +45,11 @@ class AdminEditProductsController extends GetxController {
     modelLink.value = await Get.arguments['modelLink'];
     productname.text = await Get.arguments['productname'];
     productprice.text = await Get.arguments['productprice'];
+    stocks.text = await Get.arguments['stocks'];
     productdescription.text = await Get.arguments['productdescription'];
     woodTypesList.assignAll(await Get.arguments['woodTypesList']);
     specificationList.assignAll(await Get.arguments['specificationList']);
+    colorTypesList.assignAll(await Get.arguments['colorTypesList']);
 
     super.onInit();
   }
@@ -115,7 +121,9 @@ class AdminEditProductsController extends GetxController {
         "name": productname.text,
         "price": double.parse(productprice.text.toString()),
         "specifications": specificationList,
-        "woodTypes": woodTypesList
+        "woodTypes": woodTypesList,
+        "colors": colorTypesList,
+        "stocks": stocks.text
       });
       Get.back();
       Get.snackbar("Message", "Product Updated.",

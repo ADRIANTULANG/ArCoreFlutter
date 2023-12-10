@@ -23,6 +23,8 @@ class OrderModel {
   String productimage;
   String status;
   String id;
+  String productID;
+  List<String> proofPaymentUrlList;
 
   OrderModel({
     required this.dateTime,
@@ -37,6 +39,8 @@ class OrderModel {
     required this.productimage,
     required this.status,
     required this.id,
+    required this.proofPaymentUrlList,
+    required this.productID,
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
@@ -44,6 +48,8 @@ class OrderModel {
         userAddress: json["userAddress"],
         quantity: json["quantity"],
         totalPrice: double.parse(json["totalPrice"].toString()),
+        proofPaymentUrlList:
+            List<String>.from(json["proofPaymentUrlList"].map((x) => x)),
         woodType: json["woodType"],
         price: double.parse(json["price"].toString()),
         userContactno: json["userContactno"],
@@ -52,12 +58,14 @@ class OrderModel {
         productimage: json["productimage"],
         status: json["status"],
         id: json["id"],
+        productID: json["productID"],
       );
 
   Map<String, dynamic> toJson() => {
         "dateTime": dateTime.toIso8601String(),
         "userAddress": userAddress,
         "quantity": quantity,
+        "proofPaymentUrlList": proofPaymentUrlList,
         "totalPrice": totalPrice,
         "woodType": woodType,
         "price": price,
@@ -67,5 +75,6 @@ class OrderModel {
         "productimage": productimage,
         "status": status,
         "id": id,
+        "productID": productID,
       };
 }

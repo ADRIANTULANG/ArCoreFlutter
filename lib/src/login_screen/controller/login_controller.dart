@@ -1,3 +1,4 @@
+import 'package:arproject/services/getstorage_services.dart';
 import 'package:arproject/src/login_screen/widget/login_alertdialogs.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,7 +14,7 @@ class LoginController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
 
   login() async {
-    LoginAlertdialog.showLoadingDialog();
+    // LoginAlertdialog.showLoadingDialog();
     try {
       await auth.signInWithEmailAndPassword(
           email: email.text, password: password.text);
@@ -131,7 +132,8 @@ class LoginController extends GetxController {
           .get();
       var admin = res.docs;
       if (admin.isNotEmpty) {
-        Get.to(() => const AdminBottomNavigationView());
+        Get.find<StorageServices>().storage.write('usertype', admin[0]['role']);
+        Get.offAll(() => const AdminBottomNavigationView());
       } else {
         Get.snackbar("Message", "Invalid Code",
             backgroundColor: Colors.red, colorText: Colors.white);

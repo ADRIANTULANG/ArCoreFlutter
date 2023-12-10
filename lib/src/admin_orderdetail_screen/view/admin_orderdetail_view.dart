@@ -200,6 +200,21 @@ class AdminOrderDetailView extends GetView<AdminOrderDetailController> {
                           ],
                         ),
                       ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Color: ",
+                              style: Styles.mediumTextNormal,
+                            ),
+                            Text(
+                              controller.orderDetail.color,
+                              style: Styles.mediumTextBold,
+                            ),
+                          ],
+                        ),
+                      ),
                       SizedBox(
                         height: 2.h,
                       ),
@@ -391,6 +406,8 @@ class AdminOrderDetailView extends GetView<AdminOrderDetailController> {
                         child: InkWell(
                           onTap: () {
                             controller.updateOrder(
+                                token: controller
+                                    .orderDetail.customerDetails.fcmToken,
                                 ordeID: controller.orderDetail.id,
                                 status: controller.orderDetail.status);
                           },
