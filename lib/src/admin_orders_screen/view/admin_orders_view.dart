@@ -145,6 +145,19 @@ class AdminOrderView extends GetView<AdminOrderController> {
                                           ),
                                         ],
                                       ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Reference no: ",
+                                            style: Styles.mediumTextNormal,
+                                          ),
+                                          Text(
+                                            controller
+                                                .ordersList[index].referenceNo,
+                                            style: Styles.mediumTextBold,
+                                          ),
+                                        ],
+                                      ),
                                       SizedBox(
                                         height: 1.h,
                                       ),

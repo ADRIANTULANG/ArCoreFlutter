@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 
 class AdminOrderDetailController extends GetxController {
   AdminOrder orderDetail = AdminOrder(
+    referenceNo: "",
       color: "",
       productID: '',
       proofPaymentUrlList: [],

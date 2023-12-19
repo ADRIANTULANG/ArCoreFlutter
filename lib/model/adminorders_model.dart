@@ -20,12 +20,14 @@ class AdminOrder {
   String productimage;
   String status;
   String productID;
+  String referenceNo;
   String color;
   CustomerDetails customerDetails;
   List<String> proofPaymentUrlList;
 
   AdminOrder({
     required this.id,
+    required this.referenceNo,
     required this.userAddress,
     required this.dateTime,
     required this.quantity,
@@ -45,6 +47,7 @@ class AdminOrder {
 
   factory AdminOrder.fromJson(Map<String, dynamic> json) => AdminOrder(
         userAddress: json["userAddress"],
+        referenceNo: json["referenceNo"],
         dateTime: DateTime.parse(json["dateTime"]),
         quantity: json["quantity"],
         color: json["color"],
@@ -68,6 +71,7 @@ class AdminOrder {
         "id": id,
         "color": color,
         "productID": productID,
+        "referenceNo": referenceNo,
         "dateTime": dateTime.toIso8601String(),
         "quantity": quantity,
         "woodType": woodType,

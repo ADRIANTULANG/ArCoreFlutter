@@ -61,6 +61,7 @@ dependencies:
   syncfusion_flutter_datepicker: ^23.2.4
   carousel_slider: ^4.2.1
   extended_image: ^8.1.1
+  url_launcher: ^6.2.2
 
 dev_dependencies:
   flutter_test:

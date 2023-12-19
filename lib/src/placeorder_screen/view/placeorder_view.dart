@@ -395,10 +395,28 @@ class PlaceOrderView extends GetView<PlaceOrderController> {
                       SizedBox(
                         height: 2.h,
                       ),
+                      Container(
+                        height: 1.5.h,
+                        width: 100.w,
+                        color: Colors.grey[200],
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        child: Text(
+                          "Address Details",
+                          style: Styles.mediumTextBold,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
                       Padding(
                         padding: EdgeInsets.only(left: 7.w, right: 5.w),
                         child: Text(
-                          "Address",
+                          "Street",
                           style: Styles.mediumTextNormal,
                         ),
                       ),
@@ -410,7 +428,65 @@ class PlaceOrderView extends GetView<PlaceOrderController> {
                         height: 7.h,
                         width: 100.w,
                         child: TextField(
-                          controller: controller.address,
+                          controller: controller.street,
+                          decoration: InputDecoration(
+                              fillColor: Colors.lightBlue[50],
+                              filled: true,
+                              contentPadding: EdgeInsets.only(left: 3.w),
+                              alignLabelWithHint: false,
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              hintStyle: const TextStyle(fontFamily: 'Bariol')),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 7.w, right: 5.w),
+                        child: Text(
+                          "Barangay",
+                          style: Styles.mediumTextNormal,
+                        ),
+                      ),
+                      SizedBox(
+                        height: .5.h,
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        height: 7.h,
+                        width: 100.w,
+                        child: TextField(
+                          controller: controller.baramgay,
+                          decoration: InputDecoration(
+                              fillColor: Colors.lightBlue[50],
+                              filled: true,
+                              contentPadding: EdgeInsets.only(left: 3.w),
+                              alignLabelWithHint: false,
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              hintStyle: const TextStyle(fontFamily: 'Bariol')),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 7.w, right: 5.w),
+                        child: Text(
+                          "Municipality",
+                          style: Styles.mediumTextNormal,
+                        ),
+                      ),
+                      SizedBox(
+                        height: .5.h,
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        height: 7.h,
+                        width: 100.w,
+                        child: TextField(
+                          controller: controller.municipality,
                           decoration: InputDecoration(
                               fillColor: Colors.lightBlue[50],
                               filled: true,
@@ -525,6 +601,35 @@ class PlaceOrderView extends GetView<PlaceOrderController> {
                       SizedBox(
                         height: 2.h,
                       ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 7.w, right: 5.w),
+                        child: Text(
+                          "Reference no.",
+                          style: Styles.mediumTextNormal,
+                        ),
+                      ),
+                      SizedBox(
+                        height: .5.h,
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        height: 7.h,
+                        width: 100.w,
+                        child: TextField(
+                          controller: controller.referenceNo,
+                          decoration: InputDecoration(
+                              fillColor: Colors.lightBlue[50],
+                              filled: true,
+                              contentPadding: EdgeInsets.only(left: 3.w),
+                              alignLabelWithHint: false,
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              hintStyle: const TextStyle(fontFamily: 'Bariol')),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
                       Container(
                         height: 1.5.h,
                         width: 100.w,
@@ -553,6 +658,8 @@ class PlaceOrderView extends GetView<PlaceOrderController> {
                                         side: const BorderSide(
                                             color: Colors.white)))),
                             onPressed: () {
+                              controller.address.text =
+                                  "${controller.street.text} ${controller.baramgay.text} ${controller.municipality.text}";
                               if (controller.groupWoodTypeValue.value == '') {
                                 Get.snackbar(
                                     "Message", "Please select wood type.",
@@ -585,6 +692,10 @@ class PlaceOrderView extends GetView<PlaceOrderController> {
                                   10) {
                                 Get.snackbar(
                                     "Message", "Incorrect contact no. format.",
+                                    backgroundColor: Colors.lightBlue,
+                                    colorText: Colors.white);
+                              } else if (controller.referenceNo.text.isEmpty) {
+                                Get.snackbar("Message", "Missing reference no.",
                                     backgroundColor: Colors.lightBlue,
                                     colorText: Colors.white);
                               } else {

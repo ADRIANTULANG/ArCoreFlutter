@@ -24,6 +24,8 @@ class OrderModel {
   String status;
   String id;
   String productID;
+  String referenceNo;
+
   List<String> proofPaymentUrlList;
 
   OrderModel({
@@ -39,6 +41,7 @@ class OrderModel {
     required this.productimage,
     required this.status,
     required this.id,
+    required this.referenceNo,
     required this.proofPaymentUrlList,
     required this.productID,
   });
@@ -47,6 +50,7 @@ class OrderModel {
         dateTime: DateTime.parse(json["dateTime"]),
         userAddress: json["userAddress"],
         quantity: json["quantity"],
+        referenceNo: json["referenceNo"],
         totalPrice: double.parse(json["totalPrice"].toString()),
         proofPaymentUrlList:
             List<String>.from(json["proofPaymentUrlList"].map((x) => x)),
@@ -69,6 +73,7 @@ class OrderModel {
         "totalPrice": totalPrice,
         "woodType": woodType,
         "price": price,
+        "referenceNo": referenceNo,
         "userContactno": userContactno,
         "productname": productname,
         "userEmail": userEmail,

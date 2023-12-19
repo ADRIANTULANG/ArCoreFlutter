@@ -145,6 +145,21 @@ class AdminOrderDetailView extends GetView<AdminOrderDetailController> {
                         child: Row(
                           children: [
                             Text(
+                              "Reference no: ",
+                              style: Styles.mediumTextNormal,
+                            ),
+                            Text(
+                              controller.orderDetail.referenceNo,
+                              style: Styles.mediumTextBold,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        child: Row(
+                          children: [
+                            Text(
                               "Product name: ",
                               style: Styles.mediumTextNormal,
                             ),

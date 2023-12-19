@@ -38,8 +38,13 @@ class PlaceOrderController extends GetxController {
   RxString groupColorTypeValue = ''.obs;
 
   TextEditingController address = TextEditingController();
+  TextEditingController street = TextEditingController();
+  TextEditingController baramgay = TextEditingController();
+  TextEditingController municipality = TextEditingController();
+
   TextEditingController email = TextEditingController();
   TextEditingController contactno = TextEditingController();
+  TextEditingController referenceNo = TextEditingController();
 
   DocumentReference<Map<String, dynamic>>? userDocumentID;
 
@@ -105,7 +110,8 @@ class PlaceOrderController extends GetxController {
         "userContactno": contactno.text,
         "status": "Pending",
         "dateTime": Timestamp.now(),
-        "proofPaymentUrlList": proofPaymentUrlList
+        "proofPaymentUrlList": proofPaymentUrlList,
+        "referenceNo": referenceNo.text
       });
       if (Get.isRegistered<CartController>() == true) {
         await removeItemFromCart();

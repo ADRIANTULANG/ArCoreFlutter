@@ -9,6 +9,7 @@ import '../../placeorder_screen/view/placeorder_view.dart';
 
 class OrderDetailController extends GetxController {
   OrderModel orderDetail = OrderModel(
+      referenceNo: "",
       productID: '',
       proofPaymentUrlList: [],
       dateTime: DateTime.now(),

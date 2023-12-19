@@ -349,6 +349,24 @@ class OrderDetailView extends GetView<OrderDetailController> {
                       SizedBox(
                         height: 2.h,
                       ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Reference no: ",
+                              style: Styles.mediumTextNormal,
+                            ),
+                            Text(
+                              controller.orderDetail.referenceNo,
+                              style: Styles.mediumTextBold,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2.h,
+                      ),
                       Container(
                         height: 1.5.h,
                         width: 100.w,

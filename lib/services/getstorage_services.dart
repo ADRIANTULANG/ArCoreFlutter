@@ -7,4 +7,8 @@ class StorageServices extends GetxController {
   saveToCart({required List cartList}) async {
     storage.write("cart", cartList);
   }
+
+  agreeToTermsAndConditions({required bool isAgree}) async {
+    storage.write("isAgree", isAgree);
+  }
 }
