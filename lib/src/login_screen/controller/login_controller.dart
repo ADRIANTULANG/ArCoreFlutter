@@ -1,3 +1,4 @@
+import 'package:arproject/services/authentication_services.dart';
 import 'package:arproject/services/getstorage_services.dart';
 import 'package:arproject/src/login_screen/widget/login_alertdialogs.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -28,6 +29,7 @@ class LoginController extends GetxController {
             backgroundColor: Colors.lightBlue, colorText: Colors.white);
         await FirebaseAuth.instance.signOut();
       }
+      await Get.find<AuthenticationService>().checkAuthentication();
     } catch (e) {
       if (e is FirebaseAuthException) {
         Get.back();
@@ -103,6 +105,7 @@ class LoginController extends GetxController {
           "isOnline": false
         });
       }
+      await Get.find<AuthenticationService>().checkAuthentication();
     } catch (e) {
       Get.snackbar(
           "Message", "Something went wrong please try again later. $e");

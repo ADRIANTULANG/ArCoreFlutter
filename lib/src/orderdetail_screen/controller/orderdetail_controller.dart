@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../model/orders_model.dart';
@@ -20,16 +23,19 @@ class OrderDetailController extends GetxController {
       price: 0.0,
       userContactno: "",
       productname: "",
+      shippingfee: 0.0,
       userEmail: "",
       productimage: "",
       status: "",
       id: "");
   RxBool isLoading = true.obs;
   RxList<Products> productList = <Products>[].obs;
+  RxBool showRatingButton = false.obs;
 
   @override
   void onInit() async {
     orderDetail = await Get.arguments['orderDetail'];
+    showRatingButton.value = orderDetail.status == "Completed" ? true : false;
     isLoading(false);
     super.onInit();
   }
@@ -68,5 +74,55 @@ class OrderDetailController extends GetxController {
     Future.delayed(const Duration(seconds: 2), () {
       isLoading(false);
     });
+  }
+
+  addRating({required double rate, required String comment}) async {
+    var isUserExist = await FirebaseFirestore.instance
+        .collection('products')
+        .doc(orderDetail.productID)
+        .collection('rate')
+        .where('userid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get();
+
+    var res = await FirebaseFirestore.instance
+        .collection('users')
+        .where('userid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    String email = 'Unknown User';
+    if (res.docs.isNotEmpty) {
+      email = res.docs[0].get('email');
+    }
+    log(orderDetail.productID);
+    if (isUserExist.docs.isEmpty) {
+      await FirebaseFirestore.instance
+          .collection('products')
+          .doc(orderDetail.productID)
+          .collection('rate')
+          .add({
+        "rate": rate,
+        "userid": FirebaseAuth.instance.currentUser!.uid,
+        "comment": comment,
+        'email': email
+      });
+    } else {
+      var ratedocID = await FirebaseFirestore.instance
+          .collection('products')
+          .doc(orderDetail.productID)
+          .collection('rate')
+          .where('userid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .get();
+      await FirebaseFirestore.instance
+          .collection('products')
+          .doc(orderDetail.productID)
+          .collection('rate')
+          .doc(ratedocID.docs[0].id)
+          .update({
+        "rate": rate,
+        "comment": comment,
+      });
+    }
+    Get.back();
+    Get.snackbar("Message", "Thank you for your feedback!",
+        backgroundColor: Colors.lightBlue, colorText: Colors.white);
   }
 }

@@ -37,7 +37,7 @@ class SplashView extends GetView<SplashController> {
               width: 100.w,
               decoration: const BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage('assets/images/modspace.png'))),
+                      image: AssetImage('assets/images/logoappbar.png'))),
             ),
           ),
         ],

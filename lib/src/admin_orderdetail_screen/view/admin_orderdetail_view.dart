@@ -140,21 +140,21 @@ class AdminOrderDetailView extends GetView<AdminOrderDetailController> {
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                        child: Row(
-                          children: [
-                            Text(
-                              "Reference no: ",
-                              style: Styles.mediumTextNormal,
-                            ),
-                            Text(
-                              controller.orderDetail.referenceNo,
-                              style: Styles.mediumTextBold,
-                            ),
-                          ],
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                      //   child: Row(
+                      //     children: [
+                      //       Text(
+                      //         "Reference no: ",
+                      //         style: Styles.mediumTextNormal,
+                      //       ),
+                      //       Text(
+                      //         controller.orderDetail.referenceNo,
+                      //         style: Styles.mediumTextBold,
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                       Padding(
                         padding: EdgeInsets.only(left: 5.w, right: 5.w),
                         child: Row(
@@ -180,6 +180,51 @@ class AdminOrderDetailView extends GetView<AdminOrderDetailController> {
                             ),
                             Text(
                               "₱ ${controller.orderDetail.price.toString()}",
+                              style: Styles.priceText,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Shipping fee: ",
+                              style: Styles.mediumTextNormal,
+                            ),
+                            Text(
+                              "₱ ${controller.orderDetail.shippingfee.toStringAsFixed(2)}",
+                              style: Styles.priceText,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Sub-total: ",
+                              style: Styles.mediumTextNormal,
+                            ),
+                            Text(
+                              "₱ ${(controller.orderDetail.price * controller.orderDetail.quantity).toStringAsFixed(2)}",
+                              style: Styles.priceText,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Total: ",
+                              style: Styles.mediumTextNormal,
+                            ),
+                            Text(
+                              "₱ ${((controller.orderDetail.price * controller.orderDetail.quantity) + controller.orderDetail.shippingfee).toStringAsFixed(2)}",
                               style: Styles.priceText,
                             ),
                           ],
@@ -254,14 +299,18 @@ class AdminOrderDetailView extends GetView<AdminOrderDetailController> {
                       Padding(
                         padding: EdgeInsets.only(left: 5.w, right: 5.w),
                         child: Row(
+                          mainAxisSize: MainAxisSize.max,
                           children: [
                             Text(
                               "Address to deliver: ",
                               style: Styles.mediumTextNormal,
                             ),
-                            Text(
-                              controller.orderDetail.userAddress,
-                              style: Styles.mediumTextBold,
+                            Expanded(
+                              child: Text(
+                                controller.orderDetail.userAddress,
+                                overflow: TextOverflow.ellipsis,
+                                style: Styles.mediumTextBold,
+                              ),
                             ),
                           ],
                         ),
@@ -269,14 +318,18 @@ class AdminOrderDetailView extends GetView<AdminOrderDetailController> {
                       Padding(
                         padding: EdgeInsets.only(left: 5.w, right: 5.w),
                         child: Row(
+                          mainAxisSize: MainAxisSize.max,
                           children: [
                             Text(
                               "email: ",
                               style: Styles.mediumTextNormal,
                             ),
-                            Text(
-                              controller.orderDetail.userEmail,
-                              style: Styles.mediumTextBold,
+                            Expanded(
+                              child: Text(
+                                controller.orderDetail.userEmail,
+                                overflow: TextOverflow.ellipsis,
+                                style: Styles.mediumTextBold,
+                              ),
                             ),
                           ],
                         ),

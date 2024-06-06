@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 
 class AdminOrderDetailController extends GetxController {
   AdminOrder orderDetail = AdminOrder(
-    referenceNo: "",
+      referenceNo: "",
       color: "",
       productID: '',
       proofPaymentUrlList: [],
@@ -29,6 +29,7 @@ class AdminOrderDetailController extends GetxController {
       quantity: 0,
       totalPrice: 0.0,
       woodType: "",
+      shippingfee: 0.0,
       price: 0.0,
       userContactno: "",
       productname: "",

@@ -1,5 +1,7 @@
 import 'package:arproject/config/textstyles.dart';
+import 'package:arproject/services/authentication_services.dart';
 import 'package:arproject/src/bottomnavigation_screen/controller/bottomnavigation_controller.dart';
+import 'package:arproject/src/login_screen/view/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -37,33 +39,39 @@ class AppDrawer {
                   .value = 0;
             },
           ),
-          ListTile(
-            leading: const Icon(Icons.list_alt_sharp),
-            title: const Text('Pending Orders'),
-            onTap: () {
-              Get.back();
-              Get.find<BottomNavigationController>()
-                  .currentSelectedIndex
-                  .value = 1;
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.person_2_outlined),
-            title: const Text('Profile'),
-            onTap: () {
-              Get.back();
-              Get.find<BottomNavigationController>()
-                  .currentSelectedIndex
-                  .value = 2;
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.list),
-            title: const Text('Order History'),
-            onTap: () {
-              Get.to(() => const OrderHistoryView());
-            },
-          ),
+          Get.find<AuthenticationService>().hasVerifiedUser.value == false
+              ? const SizedBox()
+              : ListTile(
+                  leading: const Icon(Icons.list_alt_sharp),
+                  title: const Text('Pending Orders'),
+                  onTap: () {
+                    Get.back();
+                    Get.find<BottomNavigationController>()
+                        .currentSelectedIndex
+                        .value = 1;
+                  },
+                ),
+          Get.find<AuthenticationService>().hasVerifiedUser.value == false
+              ? const SizedBox()
+              : ListTile(
+                  leading: const Icon(Icons.person_2_outlined),
+                  title: const Text('Profile'),
+                  onTap: () {
+                    Get.back();
+                    Get.find<BottomNavigationController>()
+                        .currentSelectedIndex
+                        .value = 2;
+                  },
+                ),
+          Get.find<AuthenticationService>().hasVerifiedUser.value == false
+              ? const SizedBox()
+              : ListTile(
+                  leading: const Icon(Icons.list),
+                  title: const Text('Order History'),
+                  onTap: () {
+                    Get.to(() => const OrderHistoryView());
+                  },
+                ),
           ListTile(
             leading: const Icon(Icons.question_mark),
             title: const Text('FAQs'),
@@ -86,14 +94,23 @@ class AppDrawer {
               showBottosheets();
             },
           ),
-          ListTile(
-            leading: const Icon(Icons.logout),
-            title: const Text('Log out'),
-            onTap: () async {
-              Get.back();
-              HomeScreenAlertDialog.showLogoutConfirmation();
-            },
-          ),
+          Get.find<AuthenticationService>().hasVerifiedUser.value == false
+              ? ListTile(
+                  leading: const Icon(Icons.logout),
+                  title: const Text('Log in'),
+                  onTap: () async {
+                    Get.back();
+                    Get.to(() => const LoginView());
+                  },
+                )
+              : ListTile(
+                  leading: const Icon(Icons.logout),
+                  title: const Text('Log out'),
+                  onTap: () async {
+                    Get.back();
+                    HomeScreenAlertDialog.showLogoutConfirmation();
+                  },
+                ),
         ],
       ),
     );

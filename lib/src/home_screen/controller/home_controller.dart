@@ -76,7 +76,7 @@ class HomeController extends GetxController {
     if (totalrate == 0) {
       rate = "0".obs;
     } else {
-      rate = (totalrate / ratings.length).toString().obs;
+      rate = (totalrate / ratings.length).toStringAsFixed(1).obs;
     }
     return rate;
   }

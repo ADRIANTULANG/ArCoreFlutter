@@ -131,7 +131,20 @@ class OrderHistoryView extends GetView<OrderHistoryController> {
                                   ),
                                 ),
                                 SizedBox(
-                                  height: .5.h,
+                                  width: 54.w,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Shipping fee:  ",
+                                        style: Styles.mediumTextNormal,
+                                      ),
+                                      Text(
+                                        "₱ ${controller.orderHistoryList[index].shippingfee.toStringAsFixed(2)}",
+                                        style: Styles.mediumTextBold,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                                 SizedBox(
                                   width: 54.w,
@@ -143,7 +156,7 @@ class OrderHistoryView extends GetView<OrderHistoryController> {
                                         style: Styles.mediumTextNormal,
                                       ),
                                       Text(
-                                        "₱ ${(controller.orderHistoryList[index].quantity * controller.orderHistoryList[index].price).toStringAsFixed(2)}",
+                                        "₱ ${((controller.orderHistoryList[index].quantity * controller.orderHistoryList[index].price) + controller.orderHistoryList[index].shippingfee).toStringAsFixed(2)}",
                                         style: Styles.mediumTextBold,
                                       ),
                                     ],

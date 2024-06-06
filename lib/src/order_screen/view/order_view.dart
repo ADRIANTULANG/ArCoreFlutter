@@ -1,3 +1,4 @@
+import 'package:arproject/services/authentication_services.dart';
 import 'package:arproject/src/cart_screen/view/cart_view.dart';
 import 'package:arproject/src/home_screen/controller/home_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -7,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:badges/badges.dart' as badges;
 import '../../../config/textstyles.dart';
+import '../../../services/nouser_uiservice.dart';
 import '../../appdrawer_screen/drawer_view.dart';
 import '../../orderdetail_screen/view/orderdetail_view.dart';
 import '../controller/order_controller.dart';
@@ -54,123 +56,184 @@ class OrderView extends GetView<OrderController> {
         child: Padding(
           padding: EdgeInsets.only(left: 5.w, right: 5.w),
           child: Obx(
-            () => ListView.builder(
-              itemCount: controller.orderList.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: EdgeInsets.only(top: 1.h),
-                  child: InkWell(
-                    onTap: () {
-                      Get.to(() => const OrderDetailView(), arguments: {
-                        "orderDetail": controller.orderList[index]
-                      });
-                    },
-                    child: Container(
-                      height: 15.h,
-                      width: 100.w,
-                      decoration: BoxDecoration(border: Border.all()),
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          left: 2.w,
+            () => Get.find<AuthenticationService>().hasVerifiedUser.value
+                ? controller.orderList.isEmpty
+                    ? SizedBox(
+                        height: 100.h,
+                        width: 100.w,
+                        child: Center(
+                          child: Text(
+                            "No available pending or accepted orders.",
+                            style: Styles.mediumTextBold,
+                          ),
                         ),
-                        child: Row(
-                          children: [
-                            CachedNetworkImage(
-                              imageUrl:
-                                  controller.orderList[index].productimage,
-                              imageBuilder: (context, imageProvider) =>
-                                  Container(
-                                height: 13.h,
-                                width: 30.w,
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: imageProvider)),
-                              ),
-                              placeholder: (context, url) => SizedBox(
-                                height: 13.h,
-                                width: 30.w,
-                                child: Center(
-                                  child: SpinKitThreeBounce(
-                                    color: Colors.lightBlue,
-                                    size: 25.sp,
+                      )
+                    : ListView.builder(
+                        itemCount: controller.orderList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Padding(
+                            padding: EdgeInsets.only(top: 1.h),
+                            child: InkWell(
+                              onTap: () {
+                                Get.to(() => const OrderDetailView(),
+                                    arguments: {
+                                      "orderDetail": controller.orderList[index]
+                                    });
+                              },
+                              child: Container(
+                                height: 15.h,
+                                width: 100.w,
+                                decoration: BoxDecoration(border: Border.all()),
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                    left: 2.w,
                                   ),
-                                ),
-                              ),
-                              errorWidget: (context, url, error) => SizedBox(
-                                  height: 13.h,
-                                  width: 30.w,
-                                  child: const Center(
-                                    child: Icon(Icons.error),
-                                  )),
-                            ),
-                            SizedBox(
-                              width: 2.w,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  height: 1.h,
-                                ),
-                                SizedBox(
-                                  width: 54.w,
                                   child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      SizedBox(
-                                        child: Text(
-                                          controller
-                                              .orderList[index].productname,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: Styles.mediumTextBold,
+                                      CachedNetworkImage(
+                                        imageUrl: controller
+                                            .orderList[index].productimage,
+                                        imageBuilder:
+                                            (context, imageProvider) =>
+                                                Container(
+                                          height: 13.h,
+                                          width: 30.w,
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  fit: BoxFit.cover,
+                                                  image: imageProvider)),
                                         ),
+                                        placeholder: (context, url) => SizedBox(
+                                          height: 13.h,
+                                          width: 30.w,
+                                          child: Center(
+                                            child: SpinKitThreeBounce(
+                                              color: Colors.lightBlue,
+                                              size: 25.sp,
+                                            ),
+                                          ),
+                                        ),
+                                        errorWidget: (context, url, error) =>
+                                            SizedBox(
+                                                height: 13.h,
+                                                width: 30.w,
+                                                child: const Center(
+                                                  child: Icon(Icons.error),
+                                                )),
                                       ),
                                       SizedBox(
-                                        child: Text(
-                                          "(${controller.orderList[index].quantity.toString()}x)",
-                                          overflow: TextOverflow.ellipsis,
-                                          style: Styles.mediumTextBold,
-                                        ),
+                                        width: 2.w,
                                       ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                            height: 1.h,
+                                          ),
+                                          SizedBox(
+                                            width: 54.w,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                SizedBox(
+                                                  child: Text(
+                                                    controller.orderList[index]
+                                                        .productname,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style:
+                                                        Styles.mediumTextBold,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  child: Text(
+                                                    "(${controller.orderList[index].quantity.toString()}x)",
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style:
+                                                        Styles.mediumTextBold,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Text(
+                                            "₱ ${controller.orderList[index].price.toString()}",
+                                            style: Styles.priceText,
+                                          ),
+                                          const Expanded(child: SizedBox()),
+                                          SizedBox(
+                                            width: 54.w,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Status:  ",
+                                                  style:
+                                                      Styles.mediumTextNormal,
+                                                ),
+                                                Text(
+                                                  controller
+                                                      .orderList[index].status,
+                                                  style: Styles.mediumTextBold,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 54.w,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Shipping fee:  ",
+                                                  style:
+                                                      Styles.mediumTextNormal,
+                                                ),
+                                                Text(
+                                                  "₱ ${(controller.orderList[index].shippingfee).toStringAsFixed(2)}",
+                                                  style: Styles.mediumTextBold,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 54.w,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Total Amount:  ",
+                                                  style:
+                                                      Styles.mediumTextNormal,
+                                                ),
+                                                Text(
+                                                  "₱ ${((controller.orderList[index].quantity * controller.orderList[index].price) + controller.orderList[index].shippingfee).toStringAsFixed(2)}",
+                                                  style: Styles.mediumTextBold,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 1.h,
+                                          )
+                                        ],
+                                      )
                                     ],
                                   ),
                                 ),
-                                Text(
-                                  "₱ ${controller.orderList[index].price.toString()}",
-                                  style: Styles.priceText,
-                                ),
-                                const Expanded(child: SizedBox()),
-                                SizedBox(
-                                  width: 54.w,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Total Amount:  ",
-                                        style: Styles.mediumTextNormal,
-                                      ),
-                                      Text(
-                                        "₱ ${(controller.orderList[index].quantity * controller.orderList[index].price).toStringAsFixed(2)}",
-                                        style: Styles.mediumTextBold,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 1.h,
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
+                              ),
+                            ),
+                          );
+                        },
+                      )
+                : const NoVerifiedUserView(),
           ),
         ),
       ),

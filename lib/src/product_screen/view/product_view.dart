@@ -1,5 +1,6 @@
+import 'package:arproject/services/authentication_services.dart';
+import 'package:arproject/src/login_screen/view/login_view.dart';
 import 'package:arproject/src/product_screen/controller/product_controller.dart';
-import 'package:arproject/src/product_screen/widget/product_alertdialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -27,7 +28,11 @@ class ProductView extends GetView<ProductController> {
             padding: EdgeInsets.only(top: 2.3.h),
             child: InkWell(
               onTap: () {
-                controller.saveToCart();
+                if (Get.find<AuthenticationService>().hasVerifiedUser.value) {
+                  controller.saveToCart();
+                } else {
+                  Get.to(() => const LoginView());
+                }
               },
               child: FaIcon(
                 FontAwesomeIcons.cartPlus,
@@ -36,22 +41,26 @@ class ProductView extends GetView<ProductController> {
               ),
             ),
           ),
-          SizedBox(
-            width: 3.w,
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 2.3.h),
-            child: InkWell(
-              onTap: () {
-                ProductScreenAlertDialog.showRating(controller: controller);
-              },
-              child: FaIcon(
-                FontAwesomeIcons.trophy,
-                color: Colors.yellow,
-                size: 17.sp,
-              ),
-            ),
-          ),
+          // SizedBox(
+          //   width: 3.w,
+          // ),
+          // Padding(
+          //   padding: EdgeInsets.only(top: 2.3.h),
+          //   child: InkWell(
+          //     onTap: () {
+          //       if (Get.find<AuthenticationService>().hasVerifiedUser.value) {
+          //         ProductScreenAlertDialog.showRating(controller: controller);
+          //       } else {
+          //         Get.to(() => const LoginView());
+          //       }
+          //     },
+          //     child: FaIcon(
+          //       FontAwesomeIcons.trophy,
+          //       color: Colors.yellow,
+          //       size: 17.sp,
+          //     ),
+          //   ),
+          // ),
           SizedBox(
             width: 5.w,
           ),
@@ -420,8 +429,12 @@ class ProductView extends GetView<ProductController> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.red[900],
         onPressed: () {
-          Get.to(() => const PlaceOrderView(),
-              arguments: {'product': controller.product});
+          if (Get.find<AuthenticationService>().hasVerifiedUser.value) {
+            Get.to(() => const PlaceOrderView(),
+                arguments: {'product': controller.product});
+          } else {
+            Get.to(() => const LoginView());
+          }
         },
         child: const Icon(
           Icons.shopping_bag_sharp,

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:arproject/src/appdrawer_screen/drawer_view.dart';
 import 'package:arproject/src/home_screen/controller/home_controller.dart';
+import 'package:arproject/src/login_screen/view/login_view.dart';
 import 'package:arproject/src/search_screen/view/search_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -10,6 +11,7 @@ import 'package:sizer/sizer.dart';
 import '../../../config/textstyles.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:badges/badges.dart' as badges;
+import '../../../services/authentication_services.dart';
 import '../../cart_screen/view/cart_view.dart';
 import '../../product_screen/view/product_view.dart';
 
@@ -28,12 +30,19 @@ class HomeView extends GetView<HomeController> {
         title: Image.asset('assets/images/logoappbar.png'),
         actions: [
           Obx(
-            () => controller.cartCount.value > 0
+            () => controller.cartCount.value > 0 &&
+                    Get.find<AuthenticationService>().hasVerifiedUser.value
                 ? Padding(
                     padding: EdgeInsets.only(top: 1.6.h),
                     child: InkWell(
                         onTap: () {
-                          Get.to(() => const CartView());
+                          if (Get.find<AuthenticationService>()
+                              .hasVerifiedUser
+                              .value) {
+                            Get.to(() => const CartView());
+                          } else {
+                            Get.to(() => const LoginView());
+                          }
                         },
                         child: badges.Badge(
                             badgeContent:
@@ -42,7 +51,13 @@ class HomeView extends GetView<HomeController> {
                   )
                 : InkWell(
                     onTap: () {
-                      Get.to(() => const CartView());
+                      if (Get.find<AuthenticationService>()
+                          .hasVerifiedUser
+                          .value) {
+                        Get.to(() => const CartView());
+                      } else {
+                        Get.to(() => const LoginView());
+                      }
                     },
                     child: const Icon(Icons.shopping_bag_outlined)),
           ),

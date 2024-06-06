@@ -1,6 +1,8 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:arproject/services/authentication_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -33,23 +35,27 @@ class ProfileController extends GetxController {
 
   getUserDetails() async {
     try {
-      FirebaseAuth auth = FirebaseAuth.instance;
-      User? user = auth.currentUser;
-      var userDetails = await FirebaseFirestore.instance
-          .collection('users')
-          .where('userid', isEqualTo: user!.uid)
-          .limit(1)
-          .get();
-      if (userDetails.docs.isNotEmpty) {
-        firstname.text = userDetails.docs[0]['firstname'];
-        lastname.text = userDetails.docs[0]['lastname'];
-        address.text = userDetails.docs[0]['address'];
-        contactno.text = userDetails.docs[0]['contactno'];
-        if (userDetails.docs[0]['imageUrl'] != "") {
-          imageLink.value = userDetails.docs[0]['imageUrl'];
+      if (Get.find<AuthenticationService>().hasVerifiedUser.value) {
+        FirebaseAuth auth = FirebaseAuth.instance;
+        User? user = auth.currentUser;
+        var userDetails = await FirebaseFirestore.instance
+            .collection('users')
+            .where('userid', isEqualTo: user!.uid)
+            .limit(1)
+            .get();
+        if (userDetails.docs.isNotEmpty) {
+          firstname.text = userDetails.docs[0]['firstname'];
+          lastname.text = userDetails.docs[0]['lastname'];
+          address.text = userDetails.docs[0]['address'];
+          contactno.text = userDetails.docs[0]['contactno'];
+          if (userDetails.docs[0]['imageUrl'] != "") {
+            imageLink.value = userDetails.docs[0]['imageUrl'];
+          }
         }
       }
-    } on Exception catch (_) {}
+    } on Exception catch (_) {
+      log("ERROR (getUserDetails): ${_.toString()}");
+    }
   }
 
   getImage() async {

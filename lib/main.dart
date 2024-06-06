@@ -1,10 +1,13 @@
+import 'package:arproject/services/authentication_services.dart';
 import 'package:arproject/services/getstorage_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sizer/sizer.dart';
+import 'services/location_services.dart';
 import 'services/notification_services.dart';
 import 'src/chat_screen/controller/chat_controller.dart';
 import 'src/splash_screen/view/splash_view.dart';
@@ -18,6 +21,13 @@ void main() async {
           messagingSenderId: '1012971008972',
           storageBucket: "arecommerce-c4c25.appspot.com",
           projectId: 'arecommerce-c4c25'));
+  await Permission.location.request();
+  await Permission.notification.request();
+  await Get.putAsync<AuthenticationService>(
+      () async => AuthenticationService());
+  await Get.putAsync<LocationServices>(() async => LocationServices());
+
+  // Get.put(AuthenticationService());
   Get.put(NotificationServices());
   Get.put(StorageServices());
 

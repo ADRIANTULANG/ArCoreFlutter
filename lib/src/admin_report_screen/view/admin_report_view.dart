@@ -6,7 +6,9 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../../config/textstyles.dart';
 import '../../../model/chart_data_model.dart';
 import '../../../services/getstorage_services.dart';
+import '../../googlemap_screen/view/google_map_admin_view.dart';
 import '../controller/admin_report_controller.dart';
+import '../widget/admin_report_alertdialog.dart';
 import '../widget/admin_report_bottomsheet.dart';
 
 class AdminReportView extends GetView<AdminReportController> {
@@ -214,6 +216,75 @@ class AdminReportView extends GetView<AdminReportController> {
                                   ),
                                 ),
                               ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 2.h,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    "Shipping fee per KM: ",
+                                    style: Styles.mediumTextBold,
+                                  ),
+                                  Obx(
+                                    () => Text(
+                                      " ₱${controller.perKMfee.value}",
+                                      style: Styles.mediumTextBold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              ElevatedButton(
+                                  style: const ButtonStyle(
+                                      backgroundColor: MaterialStatePropertyAll(
+                                          Colors.lightBlue)),
+                                  onPressed: () {
+                                    AdminReportScreenAlertDialog
+                                        .showEditShippingFee(
+                                            controller: controller,
+                                            oldFee: controller.perKMfee.value
+                                                .toString());
+                                  },
+                                  child: const Icon(
+                                    Icons.edit,
+                                    color: Colors.lightGreen,
+                                  ))
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: 65.w,
+                                child: Obx(
+                                  () => Text(
+                                    controller.addressName.value.toString(),
+                                    overflow: TextOverflow.ellipsis,
+                                    style: Styles.mediumTextBold,
+                                  ),
+                                ),
+                              ),
+                              ElevatedButton(
+                                  style: const ButtonStyle(
+                                      backgroundColor: MaterialStatePropertyAll(
+                                          Colors.lightBlue)),
+                                  onPressed: () {
+                                    Get.to(() => const GoogleMapAdminPage());
+                                  },
+                                  child: const Icon(
+                                    Icons.location_on,
+                                    color: Colors.red,
+                                  ))
                             ],
                           ),
                         ),

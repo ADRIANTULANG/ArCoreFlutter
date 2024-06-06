@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -9,10 +10,15 @@ import '../../../model/chart_data_model.dart';
 class AdminReportController extends GetxController {
   RxList<ChartData> dataChart = <ChartData>[].obs;
   RxBool isLoading = true.obs;
+  RxBool isLoadingEdit = false.obs;
+
   RxList<AdminOrder> ordersList = <AdminOrder>[].obs;
   RxDouble totalIncome = 0.0.obs;
   RxString selectedDateRange = ''.obs;
   RxString chartType = "Column".obs;
+  RxDouble perKMfee = 0.0.obs;
+  RxString addressName = "".obs;
+  RxString feeDocID = ''.obs;
 
   getOrders({required DateTime from, required DateTime to}) async {
     var res = await FirebaseFirestore.instance
@@ -72,6 +78,37 @@ class AdminReportController extends GetxController {
     }
   }
 
+  getShippingFee() async {
+    try {
+      var res =
+          await FirebaseFirestore.instance.collection('storelocation').get();
+      var storeLocation = res.docs;
+      for (var i = 0; i < storeLocation.length; i++) {
+        perKMfee.value = double.parse(storeLocation[i]['perKMfee'].toString());
+        addressName.value = storeLocation[i]['addressname'];
+        feeDocID.value = storeLocation[i].id;
+      }
+    } catch (_) {
+      log("ERROR (getShippingFee): ${_.toString()}}");
+    }
+  }
+
+  editShippingFee({required String fee}) async {
+    try {
+      isLoadingEdit(true);
+      String newfee = double.parse(fee).toStringAsFixed(2);
+      await FirebaseFirestore.instance
+          .collection('storelocation')
+          .doc(feeDocID.value)
+          .update({"perKMfee": double.parse(newfee)});
+      getShippingFee();
+      Get.back();
+      isLoadingEdit(false);
+    } catch (e) {
+      log("ERROR (editShippingFee): ${e.toString()}}");
+    }
+  }
+
   @override
   void onInit() async {
     isLoading(true);
@@ -80,6 +117,7 @@ class AdminReportController extends GetxController {
     selectedDateRange.value =
         "${DateFormat.yMMMMd().format(from)} to ${DateFormat.yMMMMd().format(to)}";
     await getOrders(from: from, to: to);
+    await getShippingFee();
     isLoading(false);
 
     super.onInit();

@@ -1,9 +1,11 @@
 import 'package:arproject/src/chat_screen/view/chat_view.dart';
 import 'package:arproject/src/orderdetail_screen/controller/orderdetail_controller.dart';
+import 'package:arproject/src/orderdetail_screen/widget/orderdetail_alertdialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import '../../../config/textstyles.dart';
@@ -30,6 +32,31 @@ class OrderDetailView extends GetView<OrderDetailController> {
               Icons.messenger,
               color: Colors.green,
             ),
+          ),
+          Obx(
+            () => controller.showRatingButton.value
+                ? SizedBox(
+                    width: 3.w,
+                  )
+                : const SizedBox(),
+          ),
+          Obx(
+            () => controller.showRatingButton.value
+                ? Padding(
+                    padding: EdgeInsets.only(top: 2.3.h),
+                    child: InkWell(
+                      onTap: () {
+                        OrderDetailScreenAlertDialog.showRating(
+                            controller: controller);
+                      },
+                      child: FaIcon(
+                        FontAwesomeIcons.trophy,
+                        color: Colors.yellow,
+                        size: 17.sp,
+                      ),
+                    ),
+                  )
+                : const SizedBox(),
           ),
           SizedBox(
             width: 5.w,
@@ -170,6 +197,51 @@ class OrderDetailView extends GetView<OrderDetailController> {
                         child: Row(
                           children: [
                             Text(
+                              "Shipping fee: ",
+                              style: Styles.mediumTextNormal,
+                            ),
+                            Text(
+                              "₱ ${controller.orderDetail.shippingfee.toStringAsFixed(2)}",
+                              style: Styles.priceText,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Sub-total: ",
+                              style: Styles.mediumTextNormal,
+                            ),
+                            Text(
+                              "₱ ${(controller.orderDetail.price * controller.orderDetail.quantity).toStringAsFixed(2)}",
+                              style: Styles.priceText,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Total: ",
+                              style: Styles.mediumTextNormal,
+                            ),
+                            Text(
+                              "₱ ${((controller.orderDetail.price * controller.orderDetail.quantity) + controller.orderDetail.shippingfee).toStringAsFixed(2)}",
+                              style: Styles.priceText,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        child: Row(
+                          children: [
+                            Text(
                               "Order quantity: ",
                               style: Styles.mediumTextNormal,
                             ),
@@ -255,14 +327,18 @@ class OrderDetailView extends GetView<OrderDetailController> {
                       Padding(
                         padding: EdgeInsets.only(left: 5.w, right: 5.w),
                         child: Row(
+                          mainAxisSize: MainAxisSize.max,
                           children: [
                             Text(
                               "Address to deliver: ",
                               style: Styles.mediumTextNormal,
                             ),
-                            Text(
-                              controller.orderDetail.userAddress,
-                              style: Styles.mediumTextBold,
+                            Expanded(
+                              child: Text(
+                                controller.orderDetail.userAddress,
+                                overflow: TextOverflow.ellipsis,
+                                style: Styles.mediumTextBold,
+                              ),
                             ),
                           ],
                         ),
@@ -270,14 +346,17 @@ class OrderDetailView extends GetView<OrderDetailController> {
                       Padding(
                         padding: EdgeInsets.only(left: 5.w, right: 5.w),
                         child: Row(
+                          mainAxisSize: MainAxisSize.max,
                           children: [
                             Text(
                               "email: ",
                               style: Styles.mediumTextNormal,
                             ),
-                            Text(
-                              controller.orderDetail.userEmail,
-                              style: Styles.mediumTextBold,
+                            Expanded(
+                              child: Text(
+                                controller.orderDetail.userEmail,
+                                style: Styles.mediumTextBold,
+                              ),
                             ),
                           ],
                         ),
@@ -285,81 +364,17 @@ class OrderDetailView extends GetView<OrderDetailController> {
                       Padding(
                         padding: EdgeInsets.only(left: 5.w, right: 5.w),
                         child: Row(
+                          mainAxisSize: MainAxisSize.max,
                           children: [
                             Text(
                               "Contact no: ",
                               style: Styles.mediumTextNormal,
                             ),
-                            Text(
-                              controller.orderDetail.userContactno,
-                              style: Styles.mediumTextBold,
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      Container(
-                        height: 1.5.h,
-                        width: 100.w,
-                        color: Colors.grey[200],
-                      ),
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                        child: Text(
-                          "Payment Proof",
-                          style: Styles.header3,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      SizedBox(
-                        width: 100.w,
-                        height: 15.h,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount:
-                              controller.orderDetail.proofPaymentUrlList.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Padding(
-                              padding: EdgeInsets.only(left: 5.w),
-                              child: Container(
-                                height: 10.h,
-                                width: 30.w,
-                                decoration: BoxDecoration(
-                                  border: Border.all(),
-                                  image: DecorationImage(
-                                    image: NetworkImage(
-                                      controller.orderDetail
-                                          .proofPaymentUrlList[index],
-                                    ),
-                                  ),
-                                ),
+                            Expanded(
+                              child: Text(
+                                controller.orderDetail.userContactno,
+                                style: Styles.mediumTextBold,
                               ),
-                            );
-                          },
-                        ),
-                      ),
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                        child: Row(
-                          children: [
-                            Text(
-                              "Reference no: ",
-                              style: Styles.mediumTextNormal,
-                            ),
-                            Text(
-                              controller.orderDetail.referenceNo,
-                              style: Styles.mediumTextBold,
                             ),
                           ],
                         ),

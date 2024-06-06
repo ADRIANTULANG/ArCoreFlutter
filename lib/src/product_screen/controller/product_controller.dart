@@ -44,7 +44,24 @@ class ProductController extends GetxController {
         "quantity": product.quantity.value,
         "id": product.id,
         "arFile": product.arFile,
+        "stocks": product.stocks,
+        "colors": product.colors,
+        "isNew": product.isNew,
       };
+      var resRate = await FirebaseFirestore.instance
+          .collection('products')
+          .doc(product.id)
+          .collection('rate')
+          .get();
+      var rates = resRate.docs;
+      List rateList = [];
+      for (var x = 0; x < rates.length; x++) {
+        Map mapRate = rates[x].data();
+        mapRate['id'] = rates[x].id;
+        rateList.add(mapRate);
+      }
+
+      mapData['rate'] = rateList;
       cartList.add(mapData);
     } else {
       cartList = Get.find<StorageServices>().storage.read('cart');
@@ -129,7 +146,7 @@ class ProductController extends GetxController {
     if (totalrate == 0) {
       rate = "0".obs;
     } else {
-      rate = (totalrate / ratings.length).toString().obs;
+      rate = (totalrate / ratings.length).toStringAsFixed(1).obs;
     }
     return rate;
   }

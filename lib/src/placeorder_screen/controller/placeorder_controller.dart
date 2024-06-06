@@ -1,12 +1,8 @@
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:arproject/src/cart_screen/controller/cart_controller.dart';
 import 'package:arproject/src/home_screen/controller/home_controller.dart';
 import 'package:arproject/src/order_screen/controller/order_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -38,9 +34,6 @@ class PlaceOrderController extends GetxController {
   RxString groupColorTypeValue = ''.obs;
 
   TextEditingController address = TextEditingController();
-  TextEditingController street = TextEditingController();
-  TextEditingController baramgay = TextEditingController();
-  TextEditingController municipality = TextEditingController();
 
   TextEditingController email = TextEditingController();
   TextEditingController contactno = TextEditingController();
@@ -51,6 +44,11 @@ class PlaceOrderController extends GetxController {
   RxList proofImageList = [].obs;
 
   ImagePicker picker = ImagePicker();
+
+  RxDouble addressLat = 0.0.obs;
+  RxDouble addressLong = 0.0.obs;
+
+  RxString shippingFee = "0.0".obs;
 
   @override
   void onInit() async {
@@ -72,7 +70,6 @@ class PlaceOrderController extends GetxController {
 
     if (res.docs.isNotEmpty) {
       userDocumentID = firebase.collection('users').doc(res.docs[0].id);
-      address.text = res.docs[0]['address'];
       email.text = res.docs[0]['email'];
       contactno.text = res.docs[0]['contactno'];
     }
@@ -82,19 +79,20 @@ class PlaceOrderController extends GetxController {
     isLoading(true);
     try {
       List proofPaymentUrlList = [];
-      for (var i = 0; i < proofImageList.length; i++) {
-        var modeluint8list =
-            Uint8List.fromList(File(proofImageList[i]).readAsBytesSync());
-        String fileName = proofImageList[i].split('/').last;
-        final ref =
-            FirebaseStorage.instance.ref().child("proofpayments/$fileName");
-        var uploadTask = ref.putData(modeluint8list);
-        final snapshot = await uploadTask.whenComplete(() {});
-        var modelLink = await snapshot.ref.getDownloadURL();
-        proofPaymentUrlList.add(modelLink);
-      }
-
-      double totalPrice = product.quantity.value * product.price;
+      // for (var i = 0; i < proofImageList.length; i++) {
+      //   var modeluint8list =
+      //       Uint8List.fromList(File(proofImageList[i]).readAsBytesSync());
+      //   String fileName = proofImageList[i].split('/').last;
+      //   final ref =
+      //       FirebaseStorage.instance.ref().child("proofpayments/$fileName");
+      //   var uploadTask = ref.putData(modeluint8list);
+      //   final snapshot = await uploadTask.whenComplete(() {});
+      //   var modelLink = await snapshot.ref.getDownloadURL();
+      //   proofPaymentUrlList.add(modelLink);
+      // }
+      double subtotal = product.quantity.value * product.price;
+      double totalPrice = (product.quantity.value * product.price) +
+          double.parse(shippingFee.value);
       await firebase.collection('orders').add({
         "productID": product.id,
         "woodType": groupWoodTypeValue.value,
@@ -103,15 +101,19 @@ class PlaceOrderController extends GetxController {
         "color": groupColorTypeValue.value,
         "quantity": product.quantity.value,
         "price": product.price,
+        "shippingfee": double.parse(shippingFee.value),
+        "subtotal": subtotal,
         "totalPrice": totalPrice,
         "productimage": product.image,
         "userEmail": email.text,
         "userAddress": address.text,
+        "latitude": addressLat.value,
+        "longitude": addressLong.value,
         "userContactno": contactno.text,
         "status": "Pending",
         "dateTime": Timestamp.now(),
         "proofPaymentUrlList": proofPaymentUrlList,
-        "referenceNo": referenceNo.text
+        "referenceNo": referenceNo.text,
       });
       if (Get.isRegistered<CartController>() == true) {
         await removeItemFromCart();
@@ -154,5 +156,13 @@ class PlaceOrderController extends GetxController {
     for (var i = 0; i < images.length; i++) {
       proofImageList.add(images[i].path);
     }
+  }
+
+  setAddress({
+    required double lat,
+    required double long,
+  }) async {
+    addressLat.value = lat;
+    addressLong.value = long;
   }
 }

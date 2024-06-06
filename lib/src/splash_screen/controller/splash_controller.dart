@@ -4,7 +4,6 @@ import 'dart:async';
 // import '../../../ar_view.dart';
 import '../../../services/getstorage_services.dart';
 import '../../bottomnavigation_screen/view/bottomnavigation_view.dart';
-import '../../login_screen/view/login_view.dart';
 import '../../terms_and_conditions_screen/view/terms_and_conditions_view.dart';
 
 class SplashController extends GetxController {
@@ -27,7 +26,8 @@ class SplashController extends GetxController {
             Get.find<StorageServices>().storage.read('isAgree') == false) {
           Get.offAll(() => const TermsAndConditionsView());
         } else {
-          Get.offAll(() => const LoginView());
+          // Get.offAll(() => const LoginView());
+          Get.offAll(() => const BottomNavView());
         }
       }
     });

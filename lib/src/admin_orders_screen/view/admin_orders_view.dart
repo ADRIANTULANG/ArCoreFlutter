@@ -6,10 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../admin_home_screen/widget/alertdialogs.dart';
 import '../../admin_orderdetail_screen/view/admin_orderdetail_view.dart';
-import '../../admin_payment_proof_screen/view/admin_payment_proof_view.dart';
 import '../../admin_report_screen/view/admin_report_view.dart';
 
 class AdminOrderView extends GetView<AdminOrderController> {
@@ -354,47 +352,47 @@ class AdminOrderView extends GetView<AdminOrderController> {
                                                     ),
                                                   ),
                                                 ),
-                                      SizedBox(
-                                        height: 2.h,
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 3.w, right: 3.w),
-                                        child: InkWell(
-                                          onTap: () {
-                                            Get.to(
-                                              () => AdminPaymentProofView(
-                                                paymentListUrl: controller
-                                                    .ordersList[index]
-                                                    .proofPaymentUrlList,
-                                              ),
-                                            );
-                                          },
-                                          child: Container(
-                                            height: 7.h,
-                                            width: 100.w,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              border: Border.all(
-                                                  color: Colors.white),
-                                              boxShadow: const [
-                                                BoxShadow(
-                                                    color: Colors.grey,
-                                                    blurRadius: 5,
-                                                    spreadRadius: 3,
-                                                    offset: Offset(1, 2))
-                                              ],
-                                              color: Colors.lightBlue[100],
-                                            ),
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              "VIEW PAYMENT PROOFS",
-                                              style: Styles.mediumTextBold,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
+                                      // SizedBox(
+                                      //   height: 2.h,
+                                      // ),
+                                      // Padding(
+                                      //   padding: EdgeInsets.only(
+                                      //       left: 3.w, right: 3.w),
+                                      //   child: InkWell(
+                                      //     onTap: () {
+                                      //       Get.to(
+                                      //         () => AdminPaymentProofView(
+                                      //           paymentListUrl: controller
+                                      //               .ordersList[index]
+                                      //               .proofPaymentUrlList,
+                                      //         ),
+                                      //       );
+                                      //     },
+                                      //     child: Container(
+                                      //       height: 7.h,
+                                      //       width: 100.w,
+                                      //       decoration: BoxDecoration(
+                                      //         borderRadius:
+                                      //             BorderRadius.circular(8),
+                                      //         border: Border.all(
+                                      //             color: Colors.white),
+                                      //         boxShadow: const [
+                                      //           BoxShadow(
+                                      //               color: Colors.grey,
+                                      //               blurRadius: 5,
+                                      //               spreadRadius: 3,
+                                      //               offset: Offset(1, 2))
+                                      //         ],
+                                      //         color: Colors.lightBlue[100],
+                                      //       ),
+                                      //       alignment: Alignment.center,
+                                      //       child: Text(
+                                      //         "VIEW PAYMENT PROOFS",
+                                      //         style: Styles.mediumTextBold,
+                                      //       ),
+                                      //     ),
+                                      //   ),
+                                      // ),
                                       SizedBox(
                                         height: 2.h,
                                       ),

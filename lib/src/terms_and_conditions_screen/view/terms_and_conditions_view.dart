@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../config/textstyles.dart';
-import '../../login_screen/view/login_view.dart';
+import '../../bottomnavigation_screen/view/bottomnavigation_view.dart';
 import '../controller/terms_and_condition_controller.dart';
 
 class TermsAndConditionsView extends GetView<TermsAndConditionsController> {
@@ -114,7 +114,7 @@ class TermsAndConditionsView extends GetView<TermsAndConditionsController> {
                                 if (controller.isAgree.value == true) {
                                   Get.find<StorageServices>()
                                       .agreeToTermsAndConditions(isAgree: true);
-                                  Get.offAll(() => const LoginView());
+                                  Get.offAll(() => const BottomNavView());
                                 }
                               },
                               child: Text("PROCEED", style: Styles.header1),

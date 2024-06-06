@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:arproject/services/authentication_services.dart';
 import 'package:arproject/src/home_screen/view/home_view.dart';
 import 'package:arproject/src/order_screen/view/order_view.dart';
 import 'package:arproject/src/profile_screen/view/profile_view.dart';
@@ -16,17 +19,23 @@ class BottomNavigationController extends GetxController {
   ];
 
   updateFcmToken() async {
-    String userID = FirebaseAuth.instance.currentUser!.uid;
-    var res = await FirebaseFirestore.instance
-        .collection('users')
-        .where('userid', isEqualTo: userID)
-        .get();
-    if (res.docs.isNotEmpty) {
-      String? token = await FirebaseMessaging.instance.getToken();
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(res.docs[0].id)
-          .update({"fcmToken": token});
+    try {
+      if (Get.find<AuthenticationService>().hasVerifiedUser.value) {
+        String userID = FirebaseAuth.instance.currentUser!.uid;
+        var res = await FirebaseFirestore.instance
+            .collection('users')
+            .where('userid', isEqualTo: userID)
+            .get();
+        if (res.docs.isNotEmpty) {
+          String? token = await FirebaseMessaging.instance.getToken();
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(res.docs[0].id)
+              .update({"fcmToken": token});
+        }
+      }
+    } on Exception catch (e) {
+      log("ERROR (updateFcmToken): ${e.toString()}");
     }
   }
 

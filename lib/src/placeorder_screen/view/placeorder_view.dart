@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:arproject/src/placeorder_screen/controller/placeorder_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../config/textstyles.dart';
+import '../../googlemap_screen/view/google_map_user_view.dart';
 
 class PlaceOrderView extends GetView<PlaceOrderController> {
   const PlaceOrderView({super.key});
@@ -405,9 +404,24 @@ class PlaceOrderView extends GetView<PlaceOrderController> {
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                        child: Text(
-                          "Address Details",
-                          style: Styles.mediumTextBold,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Address Details",
+                              style: Styles.mediumTextBold,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Get.to(() => const GoogleMapUserPage(
+                                    ));
+                              },
+                              child: const Icon(
+                                Icons.location_on,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       SizedBox(
@@ -416,7 +430,7 @@ class PlaceOrderView extends GetView<PlaceOrderController> {
                       Padding(
                         padding: EdgeInsets.only(left: 7.w, right: 5.w),
                         child: Text(
-                          "Street",
+                          "Address",
                           style: Styles.mediumTextNormal,
                         ),
                       ),
@@ -428,7 +442,7 @@ class PlaceOrderView extends GetView<PlaceOrderController> {
                         height: 7.h,
                         width: 100.w,
                         child: TextField(
-                          controller: controller.street,
+                          controller: controller.address,
                           decoration: InputDecoration(
                               fillColor: Colors.lightBlue[50],
                               filled: true,
@@ -439,67 +453,140 @@ class PlaceOrderView extends GetView<PlaceOrderController> {
                               hintStyle: const TextStyle(fontFamily: 'Bariol')),
                         ),
                       ),
+
                       SizedBox(
                         height: 2.h,
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 7.w, right: 5.w),
-                        child: Text(
-                          "Barangay",
-                          style: Styles.mediumTextNormal,
-                        ),
-                      ),
-                      SizedBox(
-                        height: .5.h,
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                        height: 7.h,
-                        width: 100.w,
-                        child: TextField(
-                          controller: controller.baramgay,
-                          decoration: InputDecoration(
-                              fillColor: Colors.lightBlue[50],
-                              filled: true,
-                              contentPadding: EdgeInsets.only(left: 3.w),
-                              alignLabelWithHint: false,
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8)),
-                              hintStyle: const TextStyle(fontFamily: 'Bariol')),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 7.w, right: 5.w),
-                        child: Text(
-                          "Municipality",
-                          style: Styles.mediumTextNormal,
-                        ),
-                      ),
-                      SizedBox(
-                        height: .5.h,
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                        height: 7.h,
-                        width: 100.w,
-                        child: TextField(
-                          controller: controller.municipality,
-                          decoration: InputDecoration(
-                              fillColor: Colors.lightBlue[50],
-                              filled: true,
-                              contentPadding: EdgeInsets.only(left: 3.w),
-                              alignLabelWithHint: false,
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8)),
-                              hintStyle: const TextStyle(fontFamily: 'Bariol')),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 2.h,
-                      ),
+                      // Container(
+                      //   height: 1.5.h,
+                      //   width: 100.w,
+                      //   color: Colors.grey[200],
+                      // ),
+                      // SizedBox(
+                      //   height: 2.h,
+                      // ),
+                      // Padding(
+                      //   padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: [
+                      //       Text(
+                      //         "Payment Proof",
+                      //         style: Styles.mediumTextBold,
+                      //       ),
+                      //       InkWell(
+                      //         onTap: () {
+                      //           controller.pickImageFromGallery();
+                      //         },
+                      //         child: const Icon(
+                      //           Icons.image_search_rounded,
+                      //           color: Colors.lightBlue,
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      // Obx(
+                      //   () => controller.proofImageList.isEmpty
+                      //       ? const SizedBox()
+                      //       : SizedBox(
+                      //           height: 13.h,
+                      //           width: 100.w,
+                      //           child: Padding(
+                      //             padding: EdgeInsets.only(left: 2.w, top: 2.h),
+                      //             child: Obx(
+                      //               () => ListView.builder(
+                      //                 shrinkWrap: true,
+                      //                 scrollDirection: Axis.horizontal,
+                      //                 itemCount:
+                      //                     controller.proofImageList.length,
+                      //                 itemBuilder:
+                      //                     (BuildContext context, int index) {
+                      //                   return Padding(
+                      //                     padding: EdgeInsets.only(left: 2.w),
+                      //                     child: Stack(
+                      //                       children: [
+                      //                         Container(
+                      //                           height: 10.h,
+                      //                           width: 30.w,
+                      //                           decoration: BoxDecoration(
+                      //                             border: Border.all(),
+                      //                             image: DecorationImage(
+                      //                               image: FileImage(
+                      //                                 File(controller
+                      //                                         .proofImageList[
+                      //                                     index]),
+                      //                               ),
+                      //                             ),
+                      //                           ),
+                      //                         ),
+                      //                         Positioned(
+                      //                           right: 1.w,
+                      //                           bottom: 6.h,
+                      //                           child: InkWell(
+                      //                             onTap: () {
+                      //                               controller.proofImageList
+                      //                                   .removeAt(index);
+                      //                             },
+                      //                             child: Container(
+                      //                               height: 6.h,
+                      //                               width: 6.w,
+                      //                               decoration:
+                      //                                   const BoxDecoration(
+                      //                                       shape:
+                      //                                           BoxShape.circle,
+                      //                                       color: Colors.red),
+                      //                               child: Center(
+                      //                                 child: Icon(
+                      //                                   Icons.clear,
+                      //                                   color: Colors.white,
+                      //                                   size: 12.sp,
+                      //                                 ),
+                      //                               ),
+                      //                             ),
+                      //                           ),
+                      //                         )
+                      //                       ],
+                      //                     ),
+                      //                   );
+                      //                 },
+                      //               ),
+                      //             ),
+                      //           ),
+                      //         ),
+                      // ),
+                      // SizedBox(
+                      //   height: 2.h,
+                      // ),
+                      // Padding(
+                      //   padding: EdgeInsets.only(left: 7.w, right: 5.w),
+                      //   child: Text(
+                      //     "Reference no.",
+                      //     style: Styles.mediumTextNormal,
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   height: .5.h,
+                      // ),
+                      // Container(
+                      //   padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                      //   height: 7.h,
+                      //   width: 100.w,
+                      //   child: TextField(
+                      //     controller: controller.referenceNo,
+                      //     decoration: InputDecoration(
+                      //         fillColor: Colors.lightBlue[50],
+                      //         filled: true,
+                      //         contentPadding: EdgeInsets.only(left: 3.w),
+                      //         alignLabelWithHint: false,
+                      //         border: OutlineInputBorder(
+                      //             borderRadius: BorderRadius.circular(8)),
+                      //         hintStyle: const TextStyle(fontFamily: 'Bariol')),
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   height: 2.h,
+                      // ),
                       Container(
                         height: 1.5.h,
                         width: 100.w,
@@ -514,126 +601,80 @@ class PlaceOrderView extends GetView<PlaceOrderController> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Payment Proof",
-                              style: Styles.mediumTextBold,
+                              "Quantity",
+                              style: Styles.mediumTextNormal,
                             ),
-                            InkWell(
-                              onTap: () {
-                                controller.pickImageFromGallery();
-                              },
-                              child: const Icon(
-                                Icons.image_search_rounded,
-                                color: Colors.lightBlue,
+                            Obx(
+                              () => Text(
+                                controller.product.quantity > 1
+                                    ? "${controller.product.quantity} Items"
+                                    : "${controller.product.quantity} Item",
+                                style: Styles.mediumTextBold,
                               ),
                             ),
                           ],
                         ),
                       ),
-                      Obx(
-                        () => controller.proofImageList.isEmpty
-                            ? const SizedBox()
-                            : SizedBox(
-                                height: 13.h,
-                                width: 100.w,
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 2.w, top: 2.h),
-                                  child: Obx(
-                                    () => ListView.builder(
-                                      shrinkWrap: true,
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount:
-                                          controller.proofImageList.length,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return Padding(
-                                          padding: EdgeInsets.only(left: 2.w),
-                                          child: Stack(
-                                            children: [
-                                              Container(
-                                                height: 10.h,
-                                                width: 30.w,
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(),
-                                                  image: DecorationImage(
-                                                    image: FileImage(
-                                                      File(controller
-                                                              .proofImageList[
-                                                          index]),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              Positioned(
-                                                right: 1.w,
-                                                bottom: 6.h,
-                                                child: InkWell(
-                                                  onTap: () {
-                                                    controller.proofImageList
-                                                        .removeAt(index);
-                                                  },
-                                                  child: Container(
-                                                    height: 6.h,
-                                                    width: 6.w,
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                            shape:
-                                                                BoxShape.circle,
-                                                            color: Colors.red),
-                                                    child: Center(
-                                                      child: Icon(
-                                                        Icons.clear,
-                                                        color: Colors.white,
-                                                        size: 12.sp,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Shipping fee",
+                              style: Styles.mediumTextNormal,
+                            ),
+                            Obx(
+                              () => Text(
+                                controller.shippingFee.value,
+                                style: Styles.mediumTextBold,
                               ),
+                            ),
+                          ],
+                        ),
                       ),
-                      SizedBox(
-                        height: 2.h,
+
+                      Padding(
+                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Subtotal",
+                              style: Styles.mediumTextNormal,
+                            ),
+                            Obx(
+                              () => Text(
+                                (controller.product.quantity *
+                                        controller.product.price)
+                                    .toStringAsFixed(2),
+                                style: Styles.mediumTextBold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 7.w, right: 5.w),
-                        child: Text(
-                          "Reference no.",
-                          style: Styles.mediumTextNormal,
-                        ),
-                      ),
-                      SizedBox(
-                        height: .5.h,
-                      ),
-                      Container(
                         padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                        height: 7.h,
-                        width: 100.w,
-                        child: TextField(
-                          controller: controller.referenceNo,
-                          decoration: InputDecoration(
-                              fillColor: Colors.lightBlue[50],
-                              filled: true,
-                              contentPadding: EdgeInsets.only(left: 3.w),
-                              alignLabelWithHint: false,
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8)),
-                              hintStyle: const TextStyle(fontFamily: 'Bariol')),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Total price",
+                              style: Styles.mediumTextNormal,
+                            ),
+                            Obx(
+                              () => Text(
+                                ((controller.product.quantity *
+                                            controller.product.price) +
+                                        double.parse(
+                                            controller.shippingFee.value))
+                                    .toStringAsFixed(2),
+                                style: Styles.mediumTextBold,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      Container(
-                        height: 1.5.h,
-                        width: 100.w,
-                        color: Colors.grey[200],
                       ),
                       SizedBox(
                         height: 2.h,
@@ -658,8 +699,6 @@ class PlaceOrderView extends GetView<PlaceOrderController> {
                                         side: const BorderSide(
                                             color: Colors.white)))),
                             onPressed: () {
-                              controller.address.text =
-                                  "${controller.street.text} ${controller.baramgay.text} ${controller.municipality.text}";
                               if (controller.groupWoodTypeValue.value == '') {
                                 Get.snackbar(
                                     "Message", "Please select wood type.",
@@ -671,11 +710,6 @@ class PlaceOrderView extends GetView<PlaceOrderController> {
                                     "Message", "Please select color type.",
                                     backgroundColor: Colors.lightBlue,
                                     colorText: Colors.white);
-                              } else if (controller.proofImageList.isEmpty) {
-                                Get.snackbar("Message",
-                                    "Please upload atleast one payment proof.",
-                                    backgroundColor: Colors.lightBlue,
-                                    colorText: Colors.white);
                               } else if (controller.email.text.isEmail ==
                                   false) {
                                 Get.snackbar("Message", "Invalid email format.",
@@ -684,8 +718,8 @@ class PlaceOrderView extends GetView<PlaceOrderController> {
                               } else if (controller.email.text.isEmpty ||
                                   controller.address.text.isEmpty ||
                                   controller.contactno.text.isEmpty) {
-                                Get.snackbar(
-                                    "Message", "Missing contact details info.",
+                                Get.snackbar("Message",
+                                    "Missing contact or delivery details info.",
                                     backgroundColor: Colors.lightBlue,
                                     colorText: Colors.white);
                               } else if (controller.contactno.text.length !=
@@ -694,8 +728,10 @@ class PlaceOrderView extends GetView<PlaceOrderController> {
                                     "Message", "Incorrect contact no. format.",
                                     backgroundColor: Colors.lightBlue,
                                     colorText: Colors.white);
-                              } else if (controller.referenceNo.text.isEmpty) {
-                                Get.snackbar("Message", "Missing reference no.",
+                              } else if (controller.addressLat.value == 0.0 &&
+                                  controller.addressLong.value == 0.0) {
+                                Get.snackbar("Message",
+                                    "Please put a location for the delivery address.",
                                     backgroundColor: Colors.lightBlue,
                                     colorText: Colors.white);
                               } else {

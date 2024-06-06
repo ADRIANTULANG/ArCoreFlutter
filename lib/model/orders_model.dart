@@ -25,6 +25,7 @@ class OrderModel {
   String id;
   String productID;
   String referenceNo;
+  double shippingfee;
 
   List<String> proofPaymentUrlList;
 
@@ -32,6 +33,7 @@ class OrderModel {
     required this.dateTime,
     required this.userAddress,
     required this.quantity,
+    required this.shippingfee,
     required this.totalPrice,
     required this.woodType,
     required this.price,
@@ -50,6 +52,7 @@ class OrderModel {
         dateTime: DateTime.parse(json["dateTime"]),
         userAddress: json["userAddress"],
         quantity: json["quantity"],
+        shippingfee: double.parse(json["shippingfee"].toString()),
         referenceNo: json["referenceNo"],
         totalPrice: double.parse(json["totalPrice"].toString()),
         proofPaymentUrlList:
@@ -68,6 +71,7 @@ class OrderModel {
   Map<String, dynamic> toJson() => {
         "dateTime": dateTime.toIso8601String(),
         "userAddress": userAddress,
+        "shippingfee": shippingfee,
         "quantity": quantity,
         "proofPaymentUrlList": proofPaymentUrlList,
         "totalPrice": totalPrice,
